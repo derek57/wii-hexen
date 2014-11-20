@@ -1213,12 +1213,17 @@ boolean			error_detected;
 boolean			game_quit;
 boolean			dont_move_forwards;
 
+int			extra_wad_slot_1_loaded;
+int			extra_wad_slot_2_loaded;
+int			extra_wad_slot_3_loaded;
 int			loading_disk;
 int			load_extra_wad;
 int			detailLevel;
 
 char			hexen_wad_dir[256];
-char			extra_wad[256];
+char			extra_wad_1[256];
+char			extra_wad_2[256];
+char			extra_wad_3[256];
 char			target[MAXPATH];
 char			calculated_md5_string[33];
 char			path_tmp[MAXPATH];
