@@ -260,15 +260,48 @@ void SV_SaveGame(int slot, char *description)
 	char versionText[HXS_VERSION_TEXT_LENGTH];
 
 	// Open the output file
-	if(!datadisc && HEXEN_BETA) sprintf(fileName, "%s/hex6.hxs", SavePathBeta);
-	if(!datadisc && HEXEN_BETA_DEMO) sprintf(fileName, "%s/hex6.hxs", SavePathBetaDemo);
-	if(!datadisc && HEXEN_MACDEMO) sprintf(fileName, "%s/hex6.hxs", SavePathMacDemo);
-	if(!datadisc && HEXEN_MACFULL) sprintf(fileName, "%s/hex6.hxs", SavePathMacFull);
-	if(!datadisc && HEXEN_DEMO) sprintf(fileName, "%s/hex6.hxs", SavePathDemo);
-	if(!datadisc && HEXEN_1_0) sprintf(fileName, "%s/hex6.hxs", SavePath10);
-	if(!datadisc && HEXEN_1_1) sprintf(fileName, "%s/hex6.hxs", SavePath11);
-	if(datadisc && HEXDD_1_0) sprintf(fileName, "%s/hex6.hxs", SavePathDD10);
-	if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex6.hxs", SavePathDD11);
+	if(usb)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6.hxs", SavePathBetaUSB);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathBetaDemoUSB);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathMacDemoUSB);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6.hxs", SavePathMacFullUSB);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDemoUSB);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6.hxs", SavePath10USB);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6.hxs", SavePath11USB);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDD10USB);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDD11USB);
+	}
+	else if(sd)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6.hxs", SavePathBetaSD);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathBetaDemoSD);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathMacDemoSD);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6.hxs", SavePathMacFullSD);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDemoSD);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6.hxs", SavePath10SD);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6.hxs", SavePath11SD);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDD10SD);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDD11SD);
+	}
 	OpenStreamOut(fileName);
 
 	// Write game save description
@@ -321,15 +354,48 @@ void SV_SaveMap(boolean savePlayers)
 	SavingPlayers = savePlayers;
 
 	// Open the output file
-	if(!datadisc && HEXEN_BETA) sprintf(fileName, "%s/hex6%02d.hxs", SavePathBeta, gamemap);
-	if(!datadisc && HEXEN_BETA_DEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemo, gamemap);
-	if(!datadisc && HEXEN_MACDEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemo, gamemap);
-	if(!datadisc && HEXEN_MACFULL) sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFull, gamemap);
-	if(!datadisc && HEXEN_DEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemo, gamemap);
-	if(!datadisc && HEXEN_1_0) sprintf(fileName, "%s/hex6%02d.hxs", SavePath10, gamemap);
-	if(!datadisc && HEXEN_1_1) sprintf(fileName, "%s/hex6%02d.hxs", SavePath11, gamemap);
-	if(datadisc && HEXDD_1_0) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10, gamemap);
-	if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11, gamemap);
+	if(usb)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaUSB, gamemap);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemoUSB, gamemap);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemoUSB, gamemap);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFullUSB, gamemap);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemoUSB, gamemap);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath10USB, gamemap);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath11USB, gamemap);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10USB, gamemap);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11USB, gamemap);
+	}
+	else if(sd)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaSD, gamemap);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemoSD, gamemap);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemoSD, gamemap);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFullSD, gamemap);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemoSD, gamemap);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath10SD, gamemap);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath11SD, gamemap);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10SD, gamemap);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11SD, gamemap);
+	}
 	OpenStreamOut(fileName);
 
 	// Place a header marker
@@ -379,16 +445,48 @@ void SV_LoadGame(int slot)
 	}
 
 	// Create the name
-	if(!datadisc && HEXEN_BETA) sprintf(fileName, "%s/hex6.hxs", SavePathBeta);
-	if(!datadisc && HEXEN_BETA_DEMO) sprintf(fileName, "%s/hex6.hxs", SavePathBetaDemo);
-	if(!datadisc && HEXEN_MACDEMO) sprintf(fileName, "%s/hex6.hxs", SavePathMacDemo);
-	if(!datadisc && HEXEN_MACFULL) sprintf(fileName, "%s/hex6.hxs", SavePathMacFull);
-	if(!datadisc && HEXEN_DEMO) sprintf(fileName, "%s/hex6.hxs", SavePathDemo);
-	if(!datadisc && HEXEN_1_0) sprintf(fileName, "%s/hex6.hxs", SavePath10);
-	if(!datadisc && HEXEN_1_1) sprintf(fileName, "%s/hex6.hxs", SavePath11);
-	if(datadisc && HEXDD_1_0) sprintf(fileName, "%s/hex6.hxs", SavePathDD10);
-	if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex6.hxs", SavePathDD11);
-
+	if(usb)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6.hxs", SavePathBetaUSB);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathBetaDemoUSB);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathMacDemoUSB);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6.hxs", SavePathMacFullUSB);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDemoUSB);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6.hxs", SavePath10USB);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6.hxs", SavePath11USB);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDD10USB);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDD11USB);
+	}
+	else if(sd)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6.hxs", SavePathBetaSD);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathBetaDemoSD);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathMacDemoSD);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6.hxs", SavePathMacFullSD);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDemoSD);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6.hxs", SavePath10SD);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6.hxs", SavePath11SD);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDD10SD);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6.hxs", SavePathDD11SD);
+	}
 	// Load the file
 	OpenStreamIn(fileName);
 
@@ -528,15 +626,48 @@ void SV_MapTeleport(int map, int position)
 	TargetPlayerAddrs = NULL;
 
 	gamemap = map;
-	if(!datadisc && HEXEN_BETA) sprintf(fileName, "%s/hex6%02d.hxs", SavePathBeta, gamemap);
-	if(!datadisc && HEXEN_BETA_DEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemo, gamemap);
-	if(!datadisc && HEXEN_MACDEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemo, gamemap);
-	if(!datadisc && HEXEN_MACFULL) sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFull, gamemap);
-	if(!datadisc && HEXEN_DEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemo, gamemap);
-	if(!datadisc && HEXEN_1_0) sprintf(fileName, "%s/hex6%02d.hxs", SavePath10, gamemap);
-	if(!datadisc && HEXEN_1_1) sprintf(fileName, "%s/hex6%02d.hxs", SavePath11, gamemap);
-	if(datadisc && HEXDD_1_0) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10, gamemap);
-	if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11, gamemap);
+	if(usb)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaUSB, gamemap);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemoUSB, gamemap);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemoUSB, gamemap);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFullUSB, gamemap);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemoUSB, gamemap);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath10USB, gamemap);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath11USB, gamemap);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10USB, gamemap);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11USB, gamemap);
+	}
+	else if(sd)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaSD, gamemap);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemoSD, gamemap);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemoSD, gamemap);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFullSD, gamemap);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemoSD, gamemap);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath10SD, gamemap);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath11SD, gamemap);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10SD, gamemap);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11SD, gamemap);
+	}
 	if(/*!deathmatch &&*/ ExistingFile(fileName))
 	{ // Unarchive map
 		SV_LoadMap();
@@ -687,15 +818,48 @@ boolean SV_RebornSlotAvailable(void)
 {
 	char fileName[100];
 
-	if(!datadisc && HEXEN_BETA) sprintf(fileName, "%s/hex%d.hxs", SavePathBeta, REBORN_SLOT);
-	if(!datadisc && HEXEN_BETA_DEMO) sprintf(fileName, "%s/hex%d.hxs", SavePathBetaDemo, REBORN_SLOT);
-	if(!datadisc && HEXEN_MACDEMO) sprintf(fileName, "%s/hex%d.hxs", SavePathMacDemo, REBORN_SLOT);
-	if(!datadisc && HEXEN_MACFULL) sprintf(fileName, "%s/hex%d.hxs", SavePathMacFull, REBORN_SLOT);
-	if(!datadisc && HEXEN_DEMO) sprintf(fileName, "%s/hex%d.hxs", SavePathDemo, REBORN_SLOT);
-	if(!datadisc && HEXEN_1_0) sprintf(fileName, "%s/hex%d.hxs", SavePath10, REBORN_SLOT);
-	if(!datadisc && HEXEN_1_1) sprintf(fileName, "%s/hex%d.hxs", SavePath11, REBORN_SLOT);
-	if(datadisc && HEXDD_1_0) sprintf(fileName, "%s/hex%d.hxs", SavePathDD10, REBORN_SLOT);
-	if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex%d.hxs", SavePathDD11, REBORN_SLOT);
+	if(usb)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathBetaUSB, REBORN_SLOT);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathBetaDemoUSB, REBORN_SLOT);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathMacDemoUSB, REBORN_SLOT);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathMacFullUSB, REBORN_SLOT);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDemoUSB, REBORN_SLOT);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex%d.hxs", SavePath10USB, REBORN_SLOT);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePath11USB, REBORN_SLOT);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDD10USB, REBORN_SLOT);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDD11USB, REBORN_SLOT);
+	}
+	else if(sd)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathBetaSD, REBORN_SLOT);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathBetaDemoSD, REBORN_SLOT);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathMacDemoSD, REBORN_SLOT);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathMacFullSD, REBORN_SLOT);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDemoSD, REBORN_SLOT);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex%d.hxs", SavePath10SD, REBORN_SLOT);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePath11SD, REBORN_SLOT);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDD10SD, REBORN_SLOT);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDD11SD, REBORN_SLOT);
+	}
 	return ExistingFile(fileName);
 }
 
@@ -716,15 +880,48 @@ void SV_LoadMap(void)
 	RemoveAllThinkers();
 
 	// Create the name
-	if(!datadisc && HEXEN_BETA) sprintf(fileName, "%s/hex6%02d.hxs", SavePathBeta, gamemap);
-	if(!datadisc && HEXEN_BETA_DEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemo, gamemap);
-	if(!datadisc && HEXEN_MACDEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemo, gamemap);
-	if(!datadisc && HEXEN_MACFULL) sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFull, gamemap);
-	if(!datadisc && HEXEN_DEMO) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemo, gamemap);
-	if(!datadisc && HEXEN_1_0) sprintf(fileName, "%s/hex6%02d.hxs", SavePath10, gamemap);
-	if(!datadisc && HEXEN_1_1) sprintf(fileName, "%s/hex6%02d.hxs", SavePath11, gamemap);
-	if(datadisc && HEXDD_1_0) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10, gamemap);
-	if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11, gamemap);
+	if(usb)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaUSB, gamemap);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemoUSB, gamemap);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemoUSB, gamemap);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFullUSB, gamemap);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemoUSB, gamemap);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath10USB, gamemap);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath11USB, gamemap);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10USB, gamemap);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11USB, gamemap);
+	}
+	else if(sd)
+	{
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaSD, gamemap);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathBetaDemoSD, gamemap);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacDemoSD, gamemap);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathMacFullSD, gamemap);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDemoSD, gamemap);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath10SD, gamemap);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePath11SD, gamemap);
+		if(datadisc && HEXDD_1_0)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD10SD, gamemap);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex6%02d.hxs", SavePathDD11SD, gamemap);
+	}
 
 	// Load the file
 	OpenStreamIn(fileName);
@@ -1659,29 +1856,94 @@ static void ClearSaveSlot(int slot)
 	int i;
 	char fileName[100];
 
-	for(i = 0; i < MAX_MAPS; i++)
+	if(usb)
 	{
-		if(!datadisc && HEXEN_BETA) sprintf(fileName, "%s/hex%d%02d.hxs", SavePathBeta, slot, i);
-		if(!datadisc && HEXEN_BETA_DEMO) sprintf(fileName, "%s/hex%d%02d.hxs", SavePathBetaDemo, slot, i);
-		if(!datadisc && HEXEN_MACDEMO) sprintf(fileName, "%s/hex%d%02d.hxs", SavePathMacDemo, slot, i);
-		if(!datadisc && HEXEN_MACFULL) sprintf(fileName, "%s/hex%d%02d.hxs", SavePathMacFull, slot, i);
-		if(!datadisc && HEXEN_DEMO) sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDemo, slot, i);
-		if(!datadisc && HEXEN_1_0) sprintf(fileName, "%s/hex%d%02d.hxs", SavePath10, slot, i);
-		if(!datadisc && HEXEN_1_1) sprintf(fileName, "%s/hex%d%02d.hxs", SavePath11, slot, i);
-		if(datadisc && HEXDD_1_0) sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDD10, slot, i);
-		if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDD11, slot, i);
+		for(i = 0; i < MAX_MAPS; i++)
+		{
+			if(!datadisc && HEXEN_BETA)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathBetaUSB, slot, i);
+			if(!datadisc && HEXEN_BETA_DEMO)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathBetaDemoUSB, slot, i);
+			if(!datadisc && HEXEN_MACDEMO)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathMacDemoUSB, slot, i);
+			if(!datadisc && HEXEN_MACFULL)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathMacFullUSB, slot, i);
+			if(!datadisc && HEXEN_DEMO)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDemoUSB, slot, i);
+			if(!datadisc && HEXEN_1_0)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePath10USB, slot, i);
+			if(!datadisc && HEXEN_1_1)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePath11USB, slot, i);
+			if(datadisc && HEXDD_1_0)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDD10USB, slot, i);
+			if(datadisc && HEXDD_1_1)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDD11USB, slot, i);
+			remove(fileName);
+		}
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathBetaUSB, slot);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathBetaDemoUSB, slot);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathMacDemoUSB, slot);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathMacFullUSB, slot);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDemoUSB, slot);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex%d.hxs", SavePath10USB, slot);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePath11USB, slot);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDD10USB, slot);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDD11USB, slot);
 		remove(fileName);
 	}
-	if(!datadisc && HEXEN_BETA) sprintf(fileName, "%s/hex%d.hxs", SavePathBeta, slot);
-	if(!datadisc && HEXEN_BETA_DEMO) sprintf(fileName, "%s/hex%d.hxs", SavePathBetaDemo, slot);
-	if(!datadisc && HEXEN_MACDEMO) sprintf(fileName, "%s/hex%d.hxs", SavePathMacDemo, slot);
-	if(!datadisc && HEXEN_MACFULL) sprintf(fileName, "%s/hex%d.hxs", SavePathMacFull, slot);
-	if(!datadisc && HEXEN_DEMO) sprintf(fileName, "%s/hex%d.hxs", SavePathDemo, slot);
-	if(!datadisc && HEXEN_1_0) sprintf(fileName, "%s/hex%d.hxs", SavePath10, slot);
-	if(!datadisc && HEXEN_1_1) sprintf(fileName, "%s/hex%d.hxs", SavePath11, slot);
-	if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex%d.hxs", SavePathDD10, slot);
-	if(datadisc && HEXDD_1_1) sprintf(fileName, "%s/hex%d.hxs", SavePathDD11, slot);
-	remove(fileName);
+	else if(sd)
+	{
+		for(i = 0; i < MAX_MAPS; i++)
+		{
+			if(!datadisc && HEXEN_BETA)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathBetaSD, slot, i);
+			if(!datadisc && HEXEN_BETA_DEMO)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathBetaDemoSD, slot, i);
+			if(!datadisc && HEXEN_MACDEMO)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathMacDemoSD, slot, i);
+			if(!datadisc && HEXEN_MACFULL)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathMacFullSD, slot, i);
+			if(!datadisc && HEXEN_DEMO)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDemoSD, slot, i);
+			if(!datadisc && HEXEN_1_0)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePath10SD, slot, i);
+			if(!datadisc && HEXEN_1_1)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePath11SD, slot, i);
+			if(datadisc && HEXDD_1_0)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDD10SD, slot, i);
+			if(datadisc && HEXDD_1_1)
+				sprintf(fileName, "%s/hex%d%02d.hxs", SavePathDD11SD, slot, i);
+			remove(fileName);
+		}
+		if(!datadisc && HEXEN_BETA)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathBetaSD, slot);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathBetaDemoSD, slot);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathMacDemoSD, slot);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathMacFullSD, slot);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDemoSD, slot);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(fileName, "%s/hex%d.hxs", SavePath10SD, slot);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePath11SD, slot);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDD10SD, slot);
+		if(datadisc && HEXDD_1_1)
+			sprintf(fileName, "%s/hex%d.hxs", SavePathDD11SD, slot);
+		remove(fileName);
+	}
 }
 
 //==========================================================================
@@ -1698,52 +1960,177 @@ static void CopySaveSlot(int sourceSlot, int destSlot)
 	char sourceName[100];
 	char destName[100];
 
-	for(i = 0; i < MAX_MAPS; i++)
+	if(usb)
 	{
-		if(!datadisc && HEXEN_BETA) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathBeta, sourceSlot, i);
-		if(!datadisc && HEXEN_BETA_DEMO) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathBetaDemo, sourceSlot, i);
-		if(!datadisc && HEXEN_MACDEMO) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathMacDemo, sourceSlot, i);
-		if(!datadisc && HEXEN_MACFULL) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathMacFull, sourceSlot, i);
-		if(!datadisc && HEXEN_DEMO) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDemo, sourceSlot, i);
-		if(!datadisc && HEXEN_1_0) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePath10, sourceSlot, i);
-		if(!datadisc && HEXEN_1_1) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePath11, sourceSlot, i);
-		if(datadisc && HEXDD_1_0) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDD10, sourceSlot, i);
-		if(datadisc && HEXDD_1_1) sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDD11, sourceSlot, i);
+		for(i = 0; i < MAX_MAPS; i++)
+		{
+			if(!datadisc && HEXEN_BETA)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathBetaUSB, sourceSlot, i);
+			if(!datadisc && HEXEN_BETA_DEMO)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathBetaDemoUSB, sourceSlot, i);
+			if(!datadisc && HEXEN_MACDEMO)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathMacDemoUSB, sourceSlot, i);
+			if(!datadisc && HEXEN_MACFULL)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathMacFullUSB, sourceSlot, i);
+			if(!datadisc && HEXEN_DEMO)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDemoUSB, sourceSlot, i);
+			if(!datadisc && HEXEN_1_0)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePath10USB, sourceSlot, i);
+			if(!datadisc && HEXEN_1_1)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePath11USB, sourceSlot, i);
+			if(datadisc && HEXDD_1_0)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDD10USB, sourceSlot, i);
+			if(datadisc && HEXDD_1_1)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDD11USB, sourceSlot, i);
+			if(ExistingFile(sourceName))
+			{
+				if(!datadisc && HEXEN_BETA)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathBetaUSB, destSlot, i);
+				if(!datadisc && HEXEN_BETA_DEMO)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathBetaDemoUSB, destSlot, i);
+				if(!datadisc && HEXEN_MACDEMO)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathMacDemoUSB, destSlot, i);
+				if(!datadisc && HEXEN_MACFULL)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathMacFullUSB, destSlot, i);
+				if(!datadisc && HEXEN_DEMO)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathDemoUSB, destSlot, i);
+				if(!datadisc && HEXEN_1_0)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePath10USB, destSlot, i);
+				if(!datadisc && HEXEN_1_1)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePath11USB, destSlot, i);
+				if(datadisc && HEXDD_1_0)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathDD10USB, destSlot, i);
+				if(datadisc && HEXDD_1_1)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathDD11USB, destSlot, i);
+				CopyFile(sourceName, destName);
+			}
+		}
+		if(!datadisc && HEXEN_BETA)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathBetaUSB, sourceSlot);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathBetaDemoUSB, sourceSlot);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathMacDemoUSB, sourceSlot);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathMacFullUSB, sourceSlot);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathDemoUSB, sourceSlot);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePath10USB, sourceSlot);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePath11USB, sourceSlot);
+		if(datadisc && HEXDD_1_0)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathDD10USB, sourceSlot);
+		if(datadisc && HEXDD_1_1)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathDD11USB, sourceSlot);
 		if(ExistingFile(sourceName))
 		{
-			if(!datadisc && HEXEN_BETA) sprintf(destName, "%s/hex%d%02d.hxs", SavePathBeta, destSlot, i);
-			if(!datadisc && HEXEN_BETA_DEMO) sprintf(destName, "%s/hex%d%02d.hxs", SavePathBetaDemo, destSlot, i);
-			if(!datadisc && HEXEN_MACDEMO) sprintf(destName, "%s/hex%d%02d.hxs", SavePathMacDemo, destSlot, i);
-			if(!datadisc && HEXEN_MACFULL) sprintf(destName, "%s/hex%d%02d.hxs", SavePathMacFull, destSlot, i);
-			if(!datadisc && HEXEN_DEMO) sprintf(destName, "%s/hex%d%02d.hxs", SavePathDemo, destSlot, i);
-			if(!datadisc && HEXEN_1_0) sprintf(destName, "%s/hex%d%02d.hxs", SavePath10, destSlot, i);
-			if(!datadisc && HEXEN_1_1) sprintf(destName, "%s/hex%d%02d.hxs", SavePath11, destSlot, i);
-			if(datadisc && HEXDD_1_0) sprintf(destName, "%s/hex%d%02d.hxs", SavePathDD10, destSlot, i);
-			if(datadisc && HEXDD_1_1) sprintf(destName, "%s/hex%d%02d.hxs", SavePathDD11, destSlot, i);
+			if(!datadisc && HEXEN_BETA)
+				sprintf(destName, "%s/hex%d.hxs", SavePathBetaUSB, destSlot);
+			if(!datadisc && HEXEN_BETA_DEMO)
+				sprintf(destName, "%s/hex%d.hxs", SavePathBetaDemoUSB, destSlot);
+			if(!datadisc && HEXEN_MACDEMO)
+				sprintf(destName, "%s/hex%d.hxs", SavePathMacDemoUSB, destSlot);
+			if(!datadisc && HEXEN_MACFULL)
+				sprintf(destName, "%s/hex%d.hxs", SavePathMacFullUSB, destSlot);
+			if(!datadisc && HEXEN_DEMO)
+				sprintf(destName, "%s/hex%d.hxs", SavePathDemoUSB, destSlot);
+			if(!datadisc && HEXEN_1_0)
+				sprintf(destName, "%s/hex%d.hxs", SavePath10USB, destSlot);
+			if(!datadisc && HEXEN_1_1)
+				sprintf(destName, "%s/hex%d.hxs", SavePath11USB, destSlot);
+			if(datadisc && HEXDD_1_0)
+				sprintf(destName, "%s/hex%d.hxs", SavePathDD10USB, destSlot);
+			if(datadisc && HEXDD_1_1)
+				sprintf(destName, "%s/hex%d.hxs", SavePathDD11USB, destSlot);
 			CopyFile(sourceName, destName);
 		}
 	}
-	if(!datadisc && HEXEN_BETA) sprintf(sourceName, "%s/hex%d.hxs", SavePathBeta, sourceSlot);
-	if(!datadisc && HEXEN_BETA_DEMO) sprintf(sourceName, "%s/hex%d.hxs", SavePathBetaDemo, sourceSlot);
-	if(!datadisc && HEXEN_MACDEMO) sprintf(sourceName, "%s/hex%d.hxs", SavePathMacDemo, sourceSlot);
-	if(!datadisc && HEXEN_MACFULL) sprintf(sourceName, "%s/hex%d.hxs", SavePathMacFull, sourceSlot);
-	if(!datadisc && HEXEN_DEMO) sprintf(sourceName, "%s/hex%d.hxs", SavePathDemo, sourceSlot);
-	if(!datadisc && HEXEN_1_0) sprintf(sourceName, "%s/hex%d.hxs", SavePath10, sourceSlot);
-	if(!datadisc && HEXEN_1_1) sprintf(sourceName, "%s/hex%d.hxs", SavePath11, sourceSlot);
-	if(datadisc && HEXDD_1_0) sprintf(sourceName, "%s/hex%d.hxs", SavePathDD10, sourceSlot);
-	if(datadisc && HEXDD_1_1) sprintf(sourceName, "%s/hex%d.hxs", SavePathDD11, sourceSlot);
-	if(ExistingFile(sourceName))
+	else if(sd)
 	{
-		if(!datadisc && HEXEN_BETA) sprintf(destName, "%s/hex%d.hxs", SavePathBeta, destSlot);
-		if(!datadisc && HEXEN_BETA_DEMO) sprintf(destName, "%s/hex%d.hxs", SavePathBetaDemo, destSlot);
-		if(!datadisc && HEXEN_MACDEMO) sprintf(destName, "%s/hex%d.hxs", SavePathMacDemo, destSlot);
-		if(!datadisc && HEXEN_MACFULL) sprintf(destName, "%s/hex%d.hxs", SavePathMacFull, destSlot);
-		if(!datadisc && HEXEN_DEMO) sprintf(destName, "%s/hex%d.hxs", SavePathDemo, destSlot);
-		if(!datadisc && HEXEN_1_0) sprintf(destName, "%s/hex%d.hxs", SavePath10, destSlot);
-		if(!datadisc && HEXEN_1_1) sprintf(destName, "%s/hex%d.hxs", SavePath11, destSlot);
-		if(datadisc && HEXDD_1_0) sprintf(destName, "%s/hex%d.hxs", SavePathDD10, destSlot);
-		if(datadisc && HEXDD_1_1) sprintf(destName, "%s/hex%d.hxs", SavePathDD11, destSlot);
-		CopyFile(sourceName, destName);
+		for(i = 0; i < MAX_MAPS; i++)
+		{
+			if(!datadisc && HEXEN_BETA)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathBetaSD, sourceSlot, i);
+			if(!datadisc && HEXEN_BETA_DEMO)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathBetaDemoSD, sourceSlot, i);
+			if(!datadisc && HEXEN_MACDEMO)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathMacDemoSD, sourceSlot, i);
+			if(!datadisc && HEXEN_MACFULL)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathMacFullSD, sourceSlot, i);
+			if(!datadisc && HEXEN_DEMO)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDemoSD, sourceSlot, i);
+			if(!datadisc && HEXEN_1_0)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePath10SD, sourceSlot, i);
+			if(!datadisc && HEXEN_1_1)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePath11SD, sourceSlot, i);
+			if(datadisc && HEXDD_1_0)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDD10SD, sourceSlot, i);
+			if(datadisc && HEXDD_1_1)
+				sprintf(sourceName, "%s/hex%d%02d.hxs", SavePathDD11SD, sourceSlot, i);
+			if(ExistingFile(sourceName))
+			{
+				if(!datadisc && HEXEN_BETA)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathBetaSD, destSlot, i);
+				if(!datadisc && HEXEN_BETA_DEMO)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathBetaDemoSD, destSlot, i);
+				if(!datadisc && HEXEN_MACDEMO)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathMacDemoSD, destSlot, i);
+				if(!datadisc && HEXEN_MACFULL)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathMacFullSD, destSlot, i);
+				if(!datadisc && HEXEN_DEMO)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathDemoSD, destSlot, i);
+				if(!datadisc && HEXEN_1_0)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePath10SD, destSlot, i);
+				if(!datadisc && HEXEN_1_1)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePath11SD, destSlot, i);
+				if(datadisc && HEXDD_1_0)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathDD10SD, destSlot, i);
+				if(datadisc && HEXDD_1_1)
+					sprintf(destName, "%s/hex%d%02d.hxs", SavePathDD11SD, destSlot, i);
+				CopyFile(sourceName, destName);
+			}
+		}
+		if(!datadisc && HEXEN_BETA)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathBetaSD, sourceSlot);
+		if(!datadisc && HEXEN_BETA_DEMO)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathBetaDemoSD, sourceSlot);
+		if(!datadisc && HEXEN_MACDEMO)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathMacDemoSD, sourceSlot);
+		if(!datadisc && HEXEN_MACFULL)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathMacFullSD, sourceSlot);
+		if(!datadisc && HEXEN_DEMO)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathDemoSD, sourceSlot);
+		if(!datadisc && HEXEN_1_0)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePath10SD, sourceSlot);
+		if(!datadisc && HEXEN_1_1)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePath11SD, sourceSlot);
+		if(datadisc && HEXDD_1_0)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathDD10SD, sourceSlot);
+		if(datadisc && HEXDD_1_1)
+			sprintf(sourceName, "%s/hex%d.hxs", SavePathDD11SD, sourceSlot);
+		if(ExistingFile(sourceName))
+		{
+			if(!datadisc && HEXEN_BETA)
+				sprintf(destName, "%s/hex%d.hxs", SavePathBetaSD, destSlot);
+			if(!datadisc && HEXEN_BETA_DEMO)
+				sprintf(destName, "%s/hex%d.hxs", SavePathBetaDemoSD, destSlot);
+			if(!datadisc && HEXEN_MACDEMO)
+				sprintf(destName, "%s/hex%d.hxs", SavePathMacDemoSD, destSlot);
+			if(!datadisc && HEXEN_MACFULL)
+				sprintf(destName, "%s/hex%d.hxs", SavePathMacFullSD, destSlot);
+			if(!datadisc && HEXEN_DEMO)
+				sprintf(destName, "%s/hex%d.hxs", SavePathDemoSD, destSlot);
+			if(!datadisc && HEXEN_1_0)
+				sprintf(destName, "%s/hex%d.hxs", SavePath10SD, destSlot);
+			if(!datadisc && HEXEN_1_1)
+				sprintf(destName, "%s/hex%d.hxs", SavePath11SD, destSlot);
+			if(datadisc && HEXDD_1_0)
+				sprintf(destName, "%s/hex%d.hxs", SavePathDD10SD, destSlot);
+			if(datadisc && HEXDD_1_1)
+				sprintf(destName, "%s/hex%d.hxs", SavePathDD11SD, destSlot);
+			CopyFile(sourceName, destName);
+		}
 	}
 }
 

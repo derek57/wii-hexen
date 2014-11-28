@@ -168,19 +168,32 @@
 #define LOADING_DISK_W 12
 #define LOADING_DISK_H 12
 
-#define SavePathRoot1 "usb:/apps/wiihexen/savegames"
-#define SavePathRoot2 "usb:/apps/wiihexen/savegames/hexen.wad"
-#define SavePathRoot3 "usb:/apps/wiihexen/savegames/hexen.wad/hexndata"
-#define SavePathRoot4 "usb:/apps/wiihexen/savegames/hexen.wad/dkngdata"
-#define SavePathBeta "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/RSBeta#3"
-#define SavePathBetaDemo "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_Beta"
-#define SavePathMacDemo "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_MacD"
-#define SavePathMacFull "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_MacR"
-#define SavePathDemo "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_Demo"
-#define SavePath10 "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/H_v1_0_R"
-#define SavePath11 "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/H_v1_1_R"
-#define SavePathDD10 "usb:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_0_R"
-#define SavePathDD11 "usb:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_1_R"
+#define SavePathRoot1USB "usb:/apps/wiihexen/savegames"
+#define SavePathRoot2USB "usb:/apps/wiihexen/savegames/hexen.wad"
+#define SavePathRoot3USB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata"
+#define SavePathRoot4USB "usb:/apps/wiihexen/savegames/hexen.wad/dkngdata"
+#define SavePathBetaUSB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/RSBeta#3"
+#define SavePathBetaDemoUSB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_Beta"
+#define SavePathMacDemoUSB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_MacD"
+#define SavePathMacFullUSB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_MacR"
+#define SavePathDemoUSB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_Demo"
+#define SavePath10USB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/H_v1_0_R"
+#define SavePath11USB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/H_v1_1_R"
+#define SavePathDD10USB "usb:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_0_R"
+#define SavePathDD11USB "usb:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_1_R"
+#define SavePathRoot1SD "sd:/apps/wiihexen/savegames"
+#define SavePathRoot2SD "sd:/apps/wiihexen/savegames/hexen.wad"
+#define SavePathRoot3SD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata"
+#define SavePathRoot4SD "sd:/apps/wiihexen/savegames/hexen.wad/dkngdata"
+#define SavePathBetaSD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata/RSBeta#3"
+#define SavePathBetaDemoSD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_Beta"
+#define SavePathMacDemoSD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_MacD"
+#define SavePathMacFullSD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_MacR"
+#define SavePathDemoSD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata/4_L_Demo"
+#define SavePath10SD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata/H_v1_0_R"
+#define SavePath11SD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata/H_v1_1_R"
+#define SavePathDD10SD "sd:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_0_R"
+#define SavePathDD11SD "sd:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_1_R"
 
 extern boolean HEXEN_BETA;
 extern boolean HEXEN_BETA_DEMO;
@@ -875,7 +888,7 @@ void G_ScreenShot(void);
 #define HXS_VERSION_TEXT_LENGTH 16
 #define HXS_DESCRIPTION_LENGTH 24
 
-extern char *SavePath;
+/*extern*/ char *SavePath;
 
 void SV_SaveGame(int slot, char *description);
 void SV_SaveMap(boolean savePlayers);
@@ -1185,6 +1198,13 @@ typedef struct
 } default_collection_t;
 
 #define MAXPATH		0x108
+
+#define M_ZOOMIN        ((int) (1.02*FRACUNIT)) // goes to 2x in 1 second
+
+#define M_ZOOMOUT       ((int) (FRACUNIT/1.02)) // pulls out to 0.5x in 1 second
+
+extern boolean sd;
+extern boolean usb;
 
 extern int		button_layout;
 extern int		mspeed;
