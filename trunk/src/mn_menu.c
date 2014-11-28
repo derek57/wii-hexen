@@ -74,7 +74,7 @@ typedef enum
     MENU_OPTIONS,
     MENU_SCREEN,
     MENU_CONTROL,
-//    MENU_BINDINGS,
+    MENU_BINDINGS,
     MENU_SOUND,
     MENU_SYSTEM,
     MENU_GAME,
@@ -247,13 +247,12 @@ static void SCMapname(int option);
 static void SCGrid(int option);
 static void SCFollow(int option);
 static void SCRotate(int option);
-/*
-static void SCSetKey(int option);
 
-static void ButtonLayout(int option);
+//static void ButtonLayout(int option);
+static void SCSetKey(int option);
 static void ClearKeys(int option);
 static void ResetKeys(int option);
-*/
+
 static void DrawMainMenu(void);
 static void DrawClassMenu(void);
 static void DrawSkillMenu(void);
@@ -268,7 +267,7 @@ static void DrawSlider(Menu_t * menu, int item, int width, int slot);
 
 static void DrawScreenMenu(void);
 static void DrawControlMenu(void);
-//static void DrawBindingsMenu(void);
+static void DrawBindingsMenu(void);
 static void DrawSoundMenu(void);
 static void DrawSystemMenu(void);
 static void DrawGameMenu(void);
@@ -295,10 +294,9 @@ extern boolean am_rotate;
 //extern int loading_disk;
 static int FirstKey = 0;
 static boolean askforkey = false;
-/*
 static int keyaskedfor;
-int ninty = 0;
-*/
+
+//int ninty = 0;
 int FramesPerSecond;
 int timer, version, mapname, coords;
 //extern boolean DebugSound;
@@ -324,9 +322,9 @@ int warped = 0;
 int rclass = 1;
 int rmap = 1;
 int rskill = 0;
+int key_bindings_start_in_cfg_at_pos = 16;
+int key_bindings_end_in_cfg_at_pos = 31;
 /*
-int key_bindings_start_in_cfg_at_pos = 13;
-int key_bindings_end_in_cfg_at_pos = 25;
 int memory_info = 0;
 int battery_info = 0;
 int cpu_info = 0;
@@ -393,8 +391,8 @@ static boolean soundchanged;
 
 boolean askforquit;
 boolean askforsave;
-static int typeofask;
-static int typeofask2;
+/*static*/ int typeofask;
+/*static*/ int typeofask2;
 static boolean FileMenuKeySteal;
 static boolean slottextloaded;
 static char SlotText[6][SLOTTEXTLEN + 2];
@@ -836,59 +834,61 @@ static Menu_t ScreenMenu = {
 };
 
 static MenuItem_t ControlItems[] = {
-    {ITT_LRFUNC, "WALKING SPEED", SCWalkingSpeed, 0, MENU_NONE},
+    {ITT_LRFUNC, "", SCWalkingSpeed, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
-    {ITT_LRFUNC, "TURNING SPEED", SCTurningSpeed, 0, MENU_NONE},
+    {ITT_LRFUNC, "", SCTurningSpeed, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
-    {ITT_LRFUNC, "STRAFING SPEED", SCStrafingSpeed, 0, MENU_NONE},
+    {ITT_LRFUNC, "", SCStrafingSpeed, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
-    {ITT_LRFUNC, "FREELOOK :", SCMouselook, 0, MENU_NONE},
-    {ITT_LRFUNC, "FREELOOK SPEED", SCMouseSpeed, 0, MENU_NONE},
-    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE}/*,
-    {},
-    {ITT_SETMENU, "KEY BINDINGS", NULL, 0, MENU_BINDINGS}*/
+    {ITT_LRFUNC, "", SCMouselook, 0, MENU_NONE},
+    {ITT_LRFUNC, "", SCMouseSpeed, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
+    {ITT_SETMENU, "", NULL, 0, MENU_BINDINGS}
 };
 
 static Menu_t ControlMenu = {
-    38, 10,
+    38, 0,
     DrawControlMenu,
-    9, ControlItems,
+    10, ControlItems,
     0,
     MENU_CONTROL
 };
-/*
+
 static MenuItem_t BindingsItems[] = {
 // see defaults[] in m_misc.c for the correct option number:
 // key_right corresponds to defaults[3], which means that we
 // are using the (index_number - 3) here.
 //
-    {ITT_SETKEY, "MOVE FORWARDS", SCSetKey, 0, MENU_NONE},
-    {ITT_SETKEY, "MOVE BACKWARDS", SCSetKey, 1, MENU_NONE},
-    {ITT_SETKEY, "", SCSetKey, 2, MENU_NONE},
-    {ITT_SETKEY, "", SCSetKey, 3, MENU_NONE},
-    {ITT_SETKEY, "INVENTORY RIGHT", SCSetKey, 4, MENU_NONE},
-    {ITT_SETKEY, "JUMP", SCSetKey, 5, MENU_NONE},
-    {ITT_SETKEY, "FLY UP", SCSetKey, 6, MENU_NONE},
-    {ITT_SETKEY, "FLY DOWN", SCSetKey, 7, MENU_NONE},
-    {ITT_SETKEY, "MAIN MENU", SCSetKey, 8, MENU_NONE},
-    {ITT_SETKEY, "USE ARTIFACT", SCSetKey, 9, MENU_NONE},
-    {ITT_SETKEY, "USE / OPEN", SCSetKey, 10, MENU_NONE},
-    {ITT_SETKEY, "FIRE", SCSetKey, 11, MENU_NONE},
-    {ITT_EMPTY, NULL, NULL, 12, MENU_NONE},
-    {ITT_LRFUNC, "BUTTON LAYOUT :", ButtonLayout, 13, MENU_NONE},
-    {ITT_EMPTY, NULL, NULL, 14, MENU_NONE},
-    {ITT_SETKEY, "CLEAR ALL CONTROLS", ClearKeys, 15, MENU_NONE},
-    {ITT_SETKEY, "RESET TO DEFAULTS", ResetKeys, 16, MENU_NONE}
+    {ITT_SETKEY, "FIRE", SCSetKey, 0, MENU_NONE},
+    {ITT_SETKEY, "USE / OPEN", SCSetKey, 1, MENU_NONE},
+    {ITT_SETKEY, "MAIN MENU", SCSetKey, 2, MENU_NONE},
+    {ITT_SETKEY, "WEAPON LEFT", SCSetKey, 3, MENU_NONE},
+    {ITT_SETKEY, "SHOW AUTOMAP", SCSetKey, 4, MENU_NONE},
+    {ITT_SETKEY, "WEAPON RIGHT", SCSetKey, 5, MENU_NONE},
+    {ITT_SETKEY, "AUTOMAP ZOOM IN", SCSetKey, 6, MENU_NONE},
+    {ITT_SETKEY, "AUTOMAP ZOOM OUT", SCSetKey, 7, MENU_NONE},
+    {ITT_SETKEY, "INVENTORY LEFT", SCSetKey, 8, MENU_NONE},
+    {ITT_SETKEY, "INVENTORY RIGHT", SCSetKey, 9, MENU_NONE},
+    {ITT_SETKEY, "INVENTORY USE", SCSetKey, 10, MENU_NONE},
+    {ITT_SETKEY, "FLY UP", SCSetKey, 11, MENU_NONE},
+    {ITT_SETKEY, "FLY DOWN", SCSetKey, 12, MENU_NONE},
+    {ITT_SETKEY, "LOOK CENTER", SCSetKey, 13, MENU_NONE},
+    {ITT_SETKEY, "JUMP", SCSetKey, 14, MENU_NONE},
+//    {ITT_EMPTY, NULL, NULL, 11, MENU_NONE},
+//    {ITT_LRFUNC, "BUTTON LAYOUT :", ButtonLayout, 12, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 15, MENU_NONE},
+    {ITT_SETKEY, "CLEAR ALL CONTROLS", ClearKeys, 16, MENU_NONE},
+    {ITT_SETKEY, "RESET TO DEFAULTS", ResetKeys, 17, MENU_NONE}
 };
 
 static Menu_t BindingsMenu = {
     40, 20,
     DrawBindingsMenu,
-    17, BindingsItems,
+    18, BindingsItems,
     0,
     MENU_BINDINGS
 };
-*/
+
 static MenuItem_t SoundItems[] = {
     {ITT_LRFUNC, "SFX VOLUME", SCSfxVolume, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
@@ -1152,7 +1152,7 @@ static Menu_t *Menus[] = {
     &OptionsMenu,
     &ScreenMenu,
     &ControlMenu,
-//    &BindingsMenu,
+    &BindingsMenu,
     &SoundMenu,
     &SystemMenu,
     &GameMenu,
@@ -1790,8 +1790,8 @@ void MN_Drawer(void)
 		   CurrentMenu==&ArtifactsMenu	||
 		   CurrentMenu==&KeysMenu	||
 		   CurrentMenu==&PuzzleMenu	||
-		   CurrentMenu==&WeaponsMenu	/*||
-		   CurrentMenu==&BindingsMenu*/)
+		   CurrentMenu==&WeaponsMenu	||
+		   CurrentMenu==&BindingsMenu)
 			MN_DrTextA(item->text, x, y);
 		else if(CurrentMenu)
 		    MN_DrTextB(item->text, x, y);
@@ -1802,8 +1802,8 @@ void MN_Drawer(void)
 		CurrentMenu==&ArtifactsMenu	||
 		CurrentMenu==&KeysMenu		||
 		CurrentMenu==&PuzzleMenu	||
-		CurrentMenu==&WeaponsMenu	/*||
-		CurrentMenu==&BindingsMenu*/)
+		CurrentMenu==&WeaponsMenu	||
+		CurrentMenu==&BindingsMenu)
 			y += ITEM_HEIGHT_SMALL;
 	    else if(CurrentMenu)
 		y += ITEM_HEIGHT;
@@ -1815,8 +1815,8 @@ void MN_Drawer(void)
 	   CurrentMenu==&ArtifactsMenu		||
 	   CurrentMenu==&KeysMenu		||
 	   CurrentMenu==&PuzzleMenu		||
-	   CurrentMenu==&WeaponsMenu		/*||
-	   CurrentMenu==&BindingsMenu*/)
+	   CurrentMenu==&WeaponsMenu		||
+	   CurrentMenu==&BindingsMenu)
 	{
 	    y = CurrentMenu->y+(CurrentItPos*ITEM_HEIGHT_SMALL)+SELECTOR_YOFFSET_SMALL;
 	    selName = MenuTime&16 ? "M_SLCTR3" : "M_SLCTR4";
@@ -2028,31 +2028,76 @@ static boolean ReadDescriptionForSlot(int slot, char *description)
     char versionText[HXS_VERSION_TEXT_LENGTH];
 
     if(!datadisc && HEXEN_BETA)
-	sprintf(name, "%s/hex%d.hxs", SavePathBeta, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePathBetaUSB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePathBetaSD, slot);
+    }
 
     if(!datadisc && HEXEN_BETA_DEMO)
-	sprintf(name, "%s/hex%d.hxs", SavePathBetaDemo, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePathBetaDemoUSB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePathBetaDemoSD, slot);
+    }
 
     if(!datadisc && HEXEN_MACDEMO)
-	sprintf(name, "%s/hex%d.hxs", SavePathMacDemo, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePathMacDemoUSB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePathMacDemoSD, slot);
+    }
 
     if(!datadisc && HEXEN_MACFULL)
-	sprintf(name, "%s/hex%d.hxs", SavePathMacFull, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePathMacFullUSB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePathMacFullSD, slot);
+    }
 
     if(!datadisc && HEXEN_DEMO)
-	sprintf(name, "%s/hex%d.hxs", SavePathDemo, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePathDemoUSB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePathDemoSD, slot);
+    }
 
     if(!datadisc && HEXEN_1_0)
-	sprintf(name, "%s/hex%d.hxs", SavePath10, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePath10USB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePath10SD, slot);
+    }
 
     if(!datadisc && HEXEN_1_1)
-	sprintf(name, "%s/hex%d.hxs", SavePath11, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePath11USB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePath11SD, slot);
+    }
 
     if(datadisc && HEXDD_1_0)
-	sprintf(name, "%s/hex%d.hxs", SavePathDD10, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePathDD10USB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePathDD10SD, slot);
+    }
 
     if(datadisc && HEXDD_1_1)
-	sprintf(name, "%s/hex%d.hxs", SavePathDD11, slot);
+    {
+	if(usb)
+	    sprintf(name, "%s/hex%d.hxs", SavePathDD11USB, slot);
+	else if(sd)
+	    sprintf(name, "%s/hex%d.hxs", SavePathDD11SD, slot);
+    }
 
     fp = fopen(name, "rb");
 
@@ -2352,20 +2397,24 @@ static void DrawScreenMenu(void)
 
 static void DrawControlMenu(void)
 {
+    MN_DrTextB("WALKING SPEED", 38, 0);
+    MN_DrTextB("TURNING SPEED", 38, 40);
+    MN_DrTextB("STRAFING SPEED", 38, 80);
+    MN_DrTextB("FREELOOK :", 38, 124);
+    MN_DrTextB("FREELOOK SPEED", 38, 142);
+    MN_DrTextB("KEY BINDINGS", 38, 179);
+
     DrawSlider(&ControlMenu, 1, 29, forwardmove-19);
     DrawSlider(&ControlMenu, 3, 6, turnspeed-5);
     DrawSlider(&ControlMenu, 5, 17, sidemove-16);
 
-    MN_DrTextB(mlooktext[mouselook], 150, 130);
+    MN_DrTextB(mlooktext[mouselook], 150, 124);
 
-    DrawSlider(&ControlMenu, 8, 9, mspeed);
-
-//    MN_DrTextB("KEY BINDINGS", 88, 179);
+    DrawSlider(&ControlMenu, 8, 9, mspeed-2);
 
     SB_state = -1;
     UpdateState |= I_FULLSCRN;
 }
-/*
 static char *stupidtable[] =
 {
     "A","B","C","D","E",
@@ -2376,7 +2425,23 @@ static char *stupidtable[] =
     "Z"
 };
 
-static char *Key2String (int key)
+#define CLASSIC_CONTROLLER_A		0x1
+#define CLASSIC_CONTROLLER_R		0x2
+#define CLASSIC_CONTROLLER_PLUS		0x4
+#define CLASSIC_CONTROLLER_L		0x8
+#define CLASSIC_CONTROLLER_MINUS	0x10
+#define CLASSIC_CONTROLLER_B		0x20
+#define CLASSIC_CONTROLLER_LEFT		0x40
+#define CLASSIC_CONTROLLER_DOWN		0x80
+#define CLASSIC_CONTROLLER_RIGHT	0x100
+#define CLASSIC_CONTROLLER_UP		0x200
+#define CLASSIC_CONTROLLER_ZR		0x400
+#define CLASSIC_CONTROLLER_ZL		0x800
+#define CLASSIC_CONTROLLER_HOME		0x1000
+#define CLASSIC_CONTROLLER_X		0x2000
+#define CLASSIC_CONTROLLER_Y		0x4000
+
+char *Key2String (int ch)
 {
 // S.A.: return "[" or "]" or "\"" doesn't work
 // because there are no lumps for these chars,
@@ -2385,25 +2450,29 @@ static char *Key2String (int key)
 // won't work with international keyboards and
 // dead keys, either.
 //
-    switch (key)
+    switch (ch)
     {
-	case KEY_UPARROW:	return "UP ARROW";
-	case KEY_DOWNARROW:	return "DOWN ARROW";
-	case KEY_LEFTARROW:	return "LEFT ARROW";
-	case KEY_RIGHTARROW:	return "RIGHT ARROW";
-	case KEY_TRIANGLE:	return "TRIANGLE";
-	case KEY_CROSS:		return "CROSS";
-	case KEY_SQUARE:	return "SQUARE";
-	case KEY_CIRCLE:	return "CIRCLE";
-	case KEY_SELECT:	return "SELECT";
-	case KEY_START:		return "START";
-	case KEY_LEFTTRIGGER:	return "LEFT TRIGGER";
-	case KEY_RIGHTTRIGGER:	return "RIGHT TRIGGER";
+	case CLASSIC_CONTROLLER_UP:	return "UP ARROW";
+	case CLASSIC_CONTROLLER_DOWN:	return "DOWN ARROW";
+	case CLASSIC_CONTROLLER_LEFT:	return "LEFT ARROW";
+	case CLASSIC_CONTROLLER_RIGHT:	return "RIGHT ARROW";
+	case CLASSIC_CONTROLLER_MINUS:	return "MINUS";
+	case CLASSIC_CONTROLLER_PLUS:	return "PLUS";
+	case CLASSIC_CONTROLLER_HOME:	return "HOME";
+	case CLASSIC_CONTROLLER_A:	return "A";
+	case CLASSIC_CONTROLLER_B:	return "B";
+	case CLASSIC_CONTROLLER_X:	return "X";
+	case CLASSIC_CONTROLLER_Y:	return "Y";
+	case CLASSIC_CONTROLLER_ZL:	return "ZL";
+	case CLASSIC_CONTROLLER_ZR:	return "ZR";
+	case CLASSIC_CONTROLLER_L:	return "LEFT TRIGGER";
+	case CLASSIC_CONTROLLER_R:	return "RIGHT TRIGGER";
     }
+
     // Handle letter keys
     // S.A.: could also be done with toupper
-    if (key >= 'a' && key <= 'z')
-	return stupidtable[(key - 'a')];
+    if (ch >= 'a' && ch <= 'z')
+	return stupidtable[(ch - 'a')];
 
     return "?";		// Everything else
 }
@@ -2421,9 +2490,6 @@ static void ClearControls (int cctrlskey)
 
 static void ClearKeys (int option)
 {
-    *doom_defaults_list[13].location = 0;
-    *doom_defaults_list[14].location = 0;
-    *doom_defaults_list[15].location = 0;
     *doom_defaults_list[16].location = 0;
     *doom_defaults_list[17].location = 0;
     *doom_defaults_list[18].location = 0;
@@ -2433,24 +2499,33 @@ static void ClearKeys (int option)
     *doom_defaults_list[22].location = 0;
     *doom_defaults_list[23].location = 0;
     *doom_defaults_list[24].location = 0;
+    *doom_defaults_list[25].location = 0;
+    *doom_defaults_list[26].location = 0;
+    *doom_defaults_list[27].location = 0;
+    *doom_defaults_list[28].location = 0;
+    *doom_defaults_list[29].location = 0;
+    *doom_defaults_list[30].location = 0;
 }
 
 static void ResetKeys (int option)
 {
-    *doom_defaults_list[13].location = 173;
-    *doom_defaults_list[14].location = 9;
-    *doom_defaults_list[15].location = 91;
-    *doom_defaults_list[16].location = 93;
-    *doom_defaults_list[17].location = 175;
-    *doom_defaults_list[18].location = 157;
-    *doom_defaults_list[19].location = 47;
-    *doom_defaults_list[20].location = 32;
-    *doom_defaults_list[21].location = 27;
-    *doom_defaults_list[22].location = 13;
-    *doom_defaults_list[23].location = 44;
-    *doom_defaults_list[24].location = 46;
+    *doom_defaults_list[16].location = CLASSIC_CONTROLLER_HOME;
+    *doom_defaults_list[17].location = CLASSIC_CONTROLLER_R;
+    *doom_defaults_list[18].location = CLASSIC_CONTROLLER_L;
+    *doom_defaults_list[19].location = CLASSIC_CONTROLLER_MINUS;
+    *doom_defaults_list[20].location = CLASSIC_CONTROLLER_LEFT;
+    *doom_defaults_list[21].location = CLASSIC_CONTROLLER_DOWN;
+    *doom_defaults_list[22].location = CLASSIC_CONTROLLER_RIGHT;
+    *doom_defaults_list[23].location = CLASSIC_CONTROLLER_ZL;
+    *doom_defaults_list[24].location = CLASSIC_CONTROLLER_ZR;
+    *doom_defaults_list[25].location = CLASSIC_CONTROLLER_Y;
+    *doom_defaults_list[26].location = CLASSIC_CONTROLLER_A;
+    *doom_defaults_list[27].location = CLASSIC_CONTROLLER_PLUS;
+    *doom_defaults_list[28].location = CLASSIC_CONTROLLER_X;
+    *doom_defaults_list[29].location = CLASSIC_CONTROLLER_B;
+    *doom_defaults_list[30].location = CLASSIC_CONTROLLER_UP;
 }
-
+/*
 static void ButtonLayout(int option)
 {
     if(option == RIGHT_DIR)
@@ -2461,19 +2536,19 @@ static void ButtonLayout(int option)
     else if(button_layout)
 	button_layout--;
 }
-
+*/
 static void DrawBindingsMenu(void)
 {
     int ctrls;
 
-    for (ctrls = 0; ctrls < 12; ctrls++)
+    for (ctrls = 0; ctrls < 15; ctrls++)
     {
 	if (askforkey && keyaskedfor == ctrls)
 	    MN_DrTextA("???", 195, (ctrls*10+20));
 	else
-	    MN_DrTextA(Key2String(*(doom_defaults_list[ctrls+FirstKey+13].location)),195,(ctrls*10+20));
+	    MN_DrTextA(Key2String(*(doom_defaults_list[ctrls+FirstKey+16].location)),195,(ctrls*10+20));
     }
-
+/*
     if(button_layout == 0)
     {
 	MN_DrTextA("TURN LEFT", 40, 40);
@@ -2486,10 +2561,11 @@ static void DrawBindingsMenu(void)
 	MN_DrTextA("STRAFE RIGHT", 40, 50);
     	MN_DrTextA("PSP", 195, 150);
     }
+*/
     SB_state = -1;
     UpdateState |= I_FULLSCRN;
 }
-*/
+
 static void DrawSoundMenu(void)
 {
     DrawSlider(&SoundMenu, 1, 16, snd_MaxVolume);
@@ -3102,7 +3178,7 @@ static void SCRotate(int option)
         break;
     }
 }
-/*
+
 static void SCSetKey(int option)
 {
     askforkey = true;
@@ -3111,7 +3187,7 @@ static void SCSetKey(int option)
     if (!demoplayback)
 	paused = true;
 }
-*/
+
 //---------------------------------------------------------------------------
 //
 // PROC DrawOptions2Menu
@@ -5069,14 +5145,14 @@ boolean MN_Responder(event_t * event)
 
 //	    joywait = I_GetTime() + 10;
 	}
-
-	if ((data->btns_d & WPAD_CLASSIC_BUTTON_MINUS) /*&& (joywait < I_GetTime())*/)
+/*
+	if (data->btns_d & WPAD_CLASSIC_BUTTON_MINUS)
 	{
 	    ch = key_menu_activate;                         // phares 3/7/98
 
 //	    joywait = I_GetTime() + 10;
 	}
-
+*/
 	if ((data->exp.classic.ljs.pos.y > (data->exp.classic.ljs.center.y + 50)) /*&& (joywait < I_GetTime())*/)
 	{
 	    ch = key_menu_up;
@@ -5233,15 +5309,15 @@ boolean MN_Responder(event_t * event)
 
         return false;
     }
-
-    if (askforkey && event->type == ev_keydown)
+*/
+    if (askforkey && data->btns_d)		// KEY BINDINGS
     {
 	ClearControls(event->data1);
-	*doom_defaults_list[keyaskedfor + 13 + FirstKey].location = event->data1;
+	*doom_defaults_list[keyaskedfor + 16 + FirstKey].location = event->data1;
 	askforkey = false;
 	return true;
     }
-*/
+
     if (askforkey && event->type == ev_mouse)
     {
 	if (event->data1 & 1)
@@ -5685,7 +5761,7 @@ boolean MN_Responder(event_t * event)
 		{
 		    if (FirstKey == 0)
 		    {
-			CurrentItPos = 17; // End of Key menu (14 == 15 (max lines on a page) - 1)
+			CurrentItPos = 18; // End of Key menu (14 == 15 (max lines on a page) - 1)
 			FirstKey = FIRSTKEY_MAX;
 		    }
 		    else

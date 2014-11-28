@@ -232,10 +232,10 @@ void D_BindVariables(void)
 }
 
 // Set the default directory where hub savegames are saved.
-/*
+
 static void D_SetDefaultSavePath(void)
 {
-    SavePath = M_GetSaveGameDir("/hexen.wad/");
+    SavePath = M_GetSaveGameDir("hexen.wad");
 
     // If we are not using a savegame path (probably because we are on
     // Windows and not using a config dir), behave like Vanilla Hexen
@@ -246,6 +246,7 @@ static void D_SetDefaultSavePath(void)
         SavePath = malloc(10);
 	sprintf(SavePath, "hexndata%c", DIR_SEPARATOR);
     }
+//    printf("savegamedir: %s\n",SavePath);	// ONLY FOR DEBUGGING
 }
 
 //
@@ -253,7 +254,7 @@ static void D_SetDefaultSavePath(void)
 //
 // Called to determine whether to grab the mouse pointer
 //
-
+/*
 static boolean D_GrabMouseCallback(void)
 {
     // when menu is active or game is paused, release the mouse
@@ -310,8 +311,12 @@ static void D_Endoom(void)
 //==========================================================================
 void InitMapMusicInfo(void);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+
 void D_DoomMain(void)
 {
+    FILE *fprw;
 /*
     GameMission_t gamemission = hexen;
     int p;
@@ -342,7 +347,10 @@ void D_DoomMain(void)
     W_CheckSize(0);
     W_CheckSize(3);
 */
-    FILE *fprw = fopen("usb:/apps/wiihexen/psphexen.wad","rb");
+    if(usb)
+	fprw = fopen("usb:/apps/wiihexen/psphexen.wad","rb");
+    else if(sd)
+	fprw = fopen("sd:/apps/wiihexen/psphexen.wad","rb");
 
     if(fprw)
     {
@@ -498,7 +506,7 @@ void D_DoomMain(void)
         M_SetConfigDir(NULL);
     }
 
-//    D_SetDefaultSavePath();
+    D_SetDefaultSavePath();
 
     M_SetConfigFilenames("hexen.cfg"/*, PROGRAM_PREFIX "hexen.cfg"*/);
 
@@ -527,8 +535,12 @@ void D_DoomMain(void)
     }
 */
     if(debugmode)
-//	D_AddFile("usb:/apps/wiihexen/IWAD/Reg/v11/HEXEN.WAD");
-	D_AddFile("usb:/apps/wiihexen/IWAD/MACFULL/HEXEN.WAD");
+    {
+	if(usb)
+	    D_AddFile("usb:/apps/wiihexen/IWAD/MACFULL/HEXEN.WAD");
+	else if(sd)
+	    D_AddFile("sd:/apps/wiihexen/IWAD/MACFULL/HEXEN.WAD");
+    }
     else
 	D_AddFile(target);
 
@@ -566,12 +578,18 @@ void D_DoomMain(void)
 
     if(debugmode && add_dk)
     {
-	D_AddFile("usb:/apps/wiihexen/IWAD/DK/Reg/v11/hexdd.wad");
+	if(usb)
+	    D_AddFile("usb:/apps/wiihexen/IWAD/DK/Reg/v11/hexdd.wad");
+	else if(sd)
+	    D_AddFile("sd:/apps/wiihexen/IWAD/DK/Reg/v11/hexdd.wad");
 
 	load_extra_wad = 1;
     }
 
-    D_AddFile("usb:/apps/wiihexen/psphexen.wad");
+    if(usb)
+	D_AddFile("usb:/apps/wiihexen/psphexen.wad");
+    else if(sd)
+	D_AddFile("sd:/apps/wiihexen/psphexen.wad");
 
     if(debugmode)
     {
@@ -950,8 +968,11 @@ static void WarpCheck(void)
 
 void H2_GameLoop(void)
 {
-    if(debugmode)
+//    if(debugmode)
+    if(usb)
 	debugfile = fopen("usb:/apps/wiihexen/debug.txt","w");
+    else if(sd)
+	debugfile = fopen("sd:/apps/wiihexen/debug.txt","w");
 
 //    I_SetWindowTitle("Hexen");
 //    I_GraphicsCheckCommandLine();
@@ -1302,6 +1323,7 @@ void CleanExit(void)
 static void CreateSavePath(void)
 {
     char *savegamedir = NULL;
+/*
     char *savegameroot;
     char *topdir = SavePathRoot1;
 
@@ -1315,33 +1337,65 @@ static void CreateSavePath(void)
 
     savegameroot = SavePathRoot4;
     M_MakeDirectory(savegameroot);
+*/
+    if(usb)
+    {
+	if(!datadisc && HEXEN_BETA)
+	    savegamedir = SavePathBetaUSB;
 
-    if(!datadisc && HEXEN_BETA)
-	savegamedir = SavePathBeta;
+	if(!datadisc && HEXEN_BETA_DEMO)
+	    savegamedir = SavePathBetaDemoUSB;
 
-    if(!datadisc && HEXEN_BETA_DEMO)
-	savegamedir = SavePathBetaDemo;
+	if(!datadisc && HEXEN_MACDEMO)
+	    savegamedir = SavePathMacDemoUSB;
 
-    if(!datadisc && HEXEN_MACDEMO)
-	savegamedir = SavePathMacDemo;
+	if(!datadisc && HEXEN_MACFULL)
+	    savegamedir = SavePathMacFullUSB;
 
-    if(!datadisc && HEXEN_MACFULL)
-	savegamedir = SavePathMacFull;
+	if(!datadisc && HEXEN_DEMO)
+	    savegamedir = SavePathDemoUSB;
 
-    if(!datadisc && HEXEN_DEMO)
-	savegamedir = SavePathDemo;
+	if(!datadisc && HEXEN_1_0)
+	    savegamedir = SavePath10USB;
 
-    if(!datadisc && HEXEN_1_0)
-	savegamedir = SavePath10;
+	if(!datadisc && HEXEN_1_1)
+	    savegamedir = SavePath11USB;
 
-    if(!datadisc && HEXEN_1_1)
-	savegamedir = SavePath11;
+	if(datadisc && HEXDD_1_0)
+	    savegamedir = SavePathDD10USB;
 
-    if(datadisc && HEXDD_1_0)
-	savegamedir = SavePathDD10;
+	if(datadisc && HEXDD_1_1)
+	    savegamedir = SavePathDD11USB;
+    }
+    else if(sd)
+    {
+	if(!datadisc && HEXEN_BETA)
+	    savegamedir = SavePathBetaSD;
 
-    if(datadisc && HEXDD_1_1)
-	savegamedir = SavePathDD11;
+	if(!datadisc && HEXEN_BETA_DEMO)
+	    savegamedir = SavePathBetaDemoSD;
+
+	if(!datadisc && HEXEN_MACDEMO)
+	    savegamedir = SavePathMacDemoSD;
+
+	if(!datadisc && HEXEN_MACFULL)
+	    savegamedir = SavePathMacFullSD;
+
+	if(!datadisc && HEXEN_DEMO)
+	    savegamedir = SavePathDemoSD;
+
+	if(!datadisc && HEXEN_1_0)
+	    savegamedir = SavePath10SD;
+
+	if(!datadisc && HEXEN_1_1)
+	    savegamedir = SavePath11SD;
+
+	if(datadisc && HEXDD_1_0)
+	    savegamedir = SavePathDD10SD;
+
+	if(datadisc && HEXDD_1_1)
+	    savegamedir = SavePathDD11SD;
+    }
 
     M_MakeDirectory(savegamedir);
 }

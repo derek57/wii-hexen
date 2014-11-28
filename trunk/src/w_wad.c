@@ -628,6 +628,10 @@ void W_CheckCorrectIWAD(GameMission_t mission)
     }
 }
 */
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+
 void W_CheckSize(/*int wad*/void)
 {
 /*
@@ -668,7 +672,10 @@ void W_CheckSize(/*int wad*/void)
     {
 	FILE *fprw;
 
-	fprw = fopen("usb:/apps/wiihexen/psphexen.wad", "r");
+	if(usb)
+	    fprw = fopen("usb:/apps/wiihexen/psphexen.wad", "r");
+	else if(sd)
+	    fprw = fopen("sd:/apps/wiihexen/psphexen.wad", "r");
 
 	if (fprw == NULL)
 	    printf(" ");

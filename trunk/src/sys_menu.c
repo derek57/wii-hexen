@@ -608,6 +608,9 @@ void Menu_WadList(void)
 */
 	printStyledText(9, 33,CONSOLE_FONT_BLACK,CONSOLE_FONT_WHITE,CONSOLE_FONT_BOLD,&stTexteLocation,"|");
 
+	if(extra_wad_loaded || md5_check)
+	    printStyledText(9, 18,CONSOLE_FONT_BLACK,CONSOLE_FONT_WHITE,CONSOLE_FONT_BOLD,&stTexteLocation,"X: start over");
+
 	printf("\n");
 
 	printStyledText(10, 0,CONSOLE_FONT_BLACK,CONSOLE_FONT_WHITE,CONSOLE_FONT_BOLD,&stTexteLocation,"  A: Select WAD");

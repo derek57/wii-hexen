@@ -249,7 +249,7 @@ void I_UpdateJoystick(void)
 
   //Left Weapon Cycle / Pan Map
   if (data->btns_h & WPAD_CLASSIC_BUTTON_LEFT)
-    btn_l = 0;
+    btn_l = 1;
 
   //Pan map	// AUTOMAP
   if (data->btns_h & WPAD_CLASSIC_BUTTON_DOWN)
@@ -257,7 +257,7 @@ void I_UpdateJoystick(void)
 
   //Right Weapon Cycle / Pan Map
   if (data->btns_h & WPAD_CLASSIC_BUTTON_RIGHT)
-    btn_u = 0;	// 0
+    btn_u = 1;	// 0
 
   //Pan Map	// Weapon Cycle Right
   if (data->btns_h & WPAD_CLASSIC_BUTTON_UP)

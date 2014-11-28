@@ -174,19 +174,21 @@ extern int key_invright, key_invuse;
 //    CONFIG_VARIABLE_INT		(btn_layout),
     CONFIG_VARIABLE_INT		(vanilla_weapon_change),
     CONFIG_VARIABLE_INT		(wii_light),
-    CONFIG_VARIABLE_INT		(key_uparrow),
-    CONFIG_VARIABLE_INT		(key_downarrow),
-    CONFIG_VARIABLE_INT		(key_leftarrow),
-    CONFIG_VARIABLE_INT		(key_rightarrow),
-    CONFIG_VARIABLE_INT		(key_other),
-    CONFIG_VARIABLE_INT		(key_triangle),
-    CONFIG_VARIABLE_INT		(key_cross),
-    CONFIG_VARIABLE_INT		(key_square),
-    CONFIG_VARIABLE_INT		(key_circle),
-    CONFIG_VARIABLE_INT		(key_select),
-    CONFIG_VARIABLE_INT		(key_start),
-    CONFIG_VARIABLE_INT		(key_lefttrigger),
-    CONFIG_VARIABLE_INT		(key_righttrigger),
+    CONFIG_VARIABLE_INT		(key_fire),
+    CONFIG_VARIABLE_INT		(key_use),
+    CONFIG_VARIABLE_INT		(key_menu),
+    CONFIG_VARIABLE_INT		(key_weapon_left),
+    CONFIG_VARIABLE_INT		(key_automap),
+    CONFIG_VARIABLE_INT		(key_weapon_right),
+    CONFIG_VARIABLE_INT		(key_automap_zoom_in),
+    CONFIG_VARIABLE_INT		(key_automap_zoom_out),
+    CONFIG_VARIABLE_INT		(key_inventory_left),
+    CONFIG_VARIABLE_INT		(key_inventory_right),
+    CONFIG_VARIABLE_INT		(key_inventory_use),
+    CONFIG_VARIABLE_INT		(key_fly_up),
+    CONFIG_VARIABLE_INT		(key_fly_down),
+    CONFIG_VARIABLE_INT		(key_look_center),
+    CONFIG_VARIABLE_INT		(key_jump),
 /*
 #ifdef FEATURE_SOUND
 
@@ -2176,6 +2178,9 @@ float M_GetFloatVariable(char *name)
 // Get the path to the default configuration dir to use, if NULL
 // is passed to M_SetConfigDir.
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type"
+
 static char *GetDefaultConfigDir(void)
 {
 
@@ -2208,7 +2213,10 @@ static char *GetDefaultConfigDir(void)
 	if(devparm)
 	    printf("FROM M_CONFIG.O: HOME-DIR IS: %s\n", homedir);
 */
-        return strdup("usb:/apps/wiihexen/");
+	if(usb)
+	    return strdup("usb:/apps/wiihexen/");
+	else if(sd)
+	    return strdup("sd:/apps/wiihexen/");
     }
 }
 
@@ -2247,12 +2255,11 @@ void M_SetConfigDir(char *dir)
 // Calculate the path to the directory to use to store save games.
 // Creates the directory as necessary.
 //
-/*
+
 char *M_GetSaveGameDir(char *iwadname)
 {
     char *savegamedir = NULL;
     char *savegameroot;
-    char *topdir;
 
     // If not "doing" a configuration directory (Windows), don't "do"
     // a savegame directory, either.
@@ -2263,49 +2270,102 @@ char *M_GetSaveGameDir(char *iwadname)
     }
     else
     {
-        // ~/.chocolate-doom/savegames
+        // ~/.chocolate-doom/savegames/
 
-        topdir = M_StringJoin(configdir, "savegames", NULL);
-        M_MakeDirectory(topdir);
+        savegamedir = malloc(strlen(configdir) + 30);
+        sprintf(savegamedir, "%ssavegames%c", configdir,
+                             DIR_SEPARATOR);
+
+        M_MakeDirectory(savegamedir);
 
         // eg. ~/.chocolate-doom/savegames/doom2.wad/
 
-//        savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, iwadname,
-//                                   DIR_SEPARATOR_S, NULL);
+        sprintf(savegamedir + strlen(savegamedir), "%s%c",
+                iwadname, DIR_SEPARATOR);
 
-	savegameroot = SavePathRoot2;
-	M_MakeDirectory(savegameroot);
+	if(usb)
+	{
+	    savegameroot = SavePathRoot1USB;
 
-	savegameroot = SavePathRoot3;
-	M_MakeDirectory(savegameroot);
+	    M_MakeDirectory(savegameroot);
 
-	savegameroot = SavePathRoot4;
-	M_MakeDirectory(savegameroot);
+	    savegameroot = SavePathRoot2USB;
 
-	if(fsize == 4261144)
-	    savegamedir = SavePathBeta;
-	else if(fsize == 4271324)
-	    savegamedir = SavePathBetaDemo;
-	else if(fsize == 4211660)
-	    savegamedir = SavePathMacDemo;
-	else if(fsize == 4207819)
-	    savegamedir = SavePathMacFull;
-	else if(fsize == 4274218)
-	    savegamedir = SavePathDemo;
-	else if(fsize == 4225504)
-	    savegamedir = SavePath10;
-	else if(fsize == 4225460)
-	    savegamedir = SavePath11;
-	else if(fsize == 4234124)
-	    savegamedir = SavePathDD10;
-	else if(fsize == 4196020)
-	    savegamedir = SavePathDD11;
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRoot3USB;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRoot4USB;
+
+	    M_MakeDirectory(savegameroot);
+	}
+	else if(sd)
+	{
+	    savegameroot = SavePathRoot1SD;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRoot2SD;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRoot3SD;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRoot4SD;
+
+	    M_MakeDirectory(savegameroot);
+	}
+
+	if(usb)
+	{
+	    if(fsize == 4261144)
+		savegamedir = SavePathBetaUSB;
+	    else if(fsize == 4271324)
+		savegamedir = SavePathBetaDemoUSB;
+	    else if(fsize == 4211660)
+		savegamedir = SavePathMacDemoUSB;
+	    else if(fsize == 4207819)
+		savegamedir = SavePathMacFullUSB;
+	    else if(fsize == 4274218)
+		savegamedir = SavePathDemoUSB;
+	    else if(fsize == 4225504)
+		savegamedir = SavePath10USB;
+	    else if(fsize == 4225460)
+		savegamedir = SavePath11USB;
+	    else if(fsize == 4234124)
+		savegamedir = SavePathDD10USB;
+	    else if(fsize == 4196020)
+		savegamedir = SavePathDD11USB;
+	}
+	else if(sd)
+	{
+	    if(fsize == 4261144)
+		savegamedir = SavePathBetaSD;
+	    else if(fsize == 4271324)
+		savegamedir = SavePathBetaDemoSD;
+	    else if(fsize == 4211660)
+		savegamedir = SavePathMacDemoSD;
+	    else if(fsize == 4207819)
+		savegamedir = SavePathMacFullSD;
+	    else if(fsize == 4274218)
+		savegamedir = SavePathDemoSD;
+	    else if(fsize == 4225504)
+		savegamedir = SavePath10SD;
+	    else if(fsize == 4225460)
+		savegamedir = SavePath11SD;
+	    else if(fsize == 4234124)
+		savegamedir = SavePathDD10SD;
+	    else if(fsize == 4196020)
+		savegamedir = SavePathDD11SD;
+	}
 
 	M_MakeDirectory(savegamedir);
-
-        free(topdir);
     }
 
     return savegamedir;
 }
-*/
+
