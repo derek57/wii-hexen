@@ -2086,6 +2086,8 @@ void G_SaveGame(int slot, char *description)
 
     if(datadisc)
 	gamemapx = gamemap - 40;
+    else
+	gamemapx = gamemap;
 
     savegameslot = slot;
 

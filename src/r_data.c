@@ -325,7 +325,8 @@ void R_InitTextures(void)
     patchlookup = Z_Malloc(nummappatches * sizeof(*patchlookup), PU_STATIC, NULL);
     for (i = 0; i < nummappatches; i++)
     {
-        strncpy(name, name_p + i * 8, 8);
+//        strncpy(name, name_p + i * 8, 8);
+        strncpy(name, name_p + i * 8, sizeof(name));
         patchlookup[i] = W_CheckNumForName(name);
     }
     W_ReleaseLumpName("PNAMES");
