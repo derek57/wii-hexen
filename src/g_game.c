@@ -408,7 +408,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int flyheight;
     int pClass;
 
-    extern boolean artiskip;
+//    extern boolean artiskip;
 
     // haleyjd: removed externdriver crap
 
@@ -617,7 +617,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         // haleyjd: removed externdriver crap
         look = TOCENTER;
     }
-*/
+
     // Use artifact key
     if (gamekeydown[key_useartifact] || joybuttons[joybinvuse])
     {
@@ -649,7 +649,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             }
         }
     }
-
+*/
     if (/*gamekeydown[key_jump] || mousebuttons[mousebjump]
 	||*/ joybuttons[joybjump] && !(dialog_active && MenuActive))
     {
@@ -725,15 +725,19 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 	{
 	    if(joybuttons[joybinvuse])
 	    {                           // flag to denote that it's okay to use an artifact
-		player_t *plr;
-
-		plr = &players[consoleplayer];
-
-	        if (!inventory)
-	        {
-	            plr->readyArtifact = plr->inventory[inv_ptr].type;
-	        }
-	        usearti = true;
+		if (inventory)
+		{
+		    players[consoleplayer].readyArtifact =
+			    players[consoleplayer].inventory[inv_ptr].type;
+		    inventory = false;
+		    cmd->arti = 0;
+		    usearti = false;
+		}
+		else /*if (usearti)*/
+		{
+		    cmd->arti = players[consoleplayer].inventory[inv_ptr].type;
+		    usearti = false;
+		}
 	    }
 
 	    if(joybuttons[joybmenu])
@@ -1113,11 +1117,12 @@ void G_DoLoadLevel(void)
 
 boolean G_Responder(event_t * ev)
 {
-    WPADData *data = WPAD_Data(0);
+//    WPADData *data = WPAD_Data(0);
 
     player_t *plr;
 
     plr = &players[consoleplayer];
+/*
     if (ev->type == ev_keyup && ev->data1 == key_useartifact)
     {                           // flag to denote that it's okay to use an artifact
         if (!inventory)
@@ -1134,7 +1139,7 @@ boolean G_Responder(event_t * ev)
         }
         usearti = true;
     }
-/*
+
     // Check for spy mode player cycle
     if (gamestate == GS_LEVEL && ev->type == ev_keydown
         && ev->data1 == key_spy && !deathmatch)
