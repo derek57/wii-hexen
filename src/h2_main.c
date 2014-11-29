@@ -1227,7 +1227,7 @@ void H2_DoAdvanceDemo(void)
         case 2:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            G_DeferedPlayDemo("demo1");
+//            G_DeferedPlayDemo("demo1");
             break;
         case 3:
             pagetic = 200;
@@ -1237,7 +1237,7 @@ void H2_DoAdvanceDemo(void)
         case 4:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            G_DeferedPlayDemo("demo2");
+//            G_DeferedPlayDemo("demo2");
             break;
         case 5:
             pagetic = 200;
@@ -1256,7 +1256,7 @@ void H2_DoAdvanceDemo(void)
         case 6:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            G_DeferedPlayDemo("demo3");
+//            G_DeferedPlayDemo("demo3");
             break;
     }
 }
