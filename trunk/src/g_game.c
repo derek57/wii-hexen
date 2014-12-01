@@ -230,6 +230,8 @@ int joy_zl = 2048;	// 11
 int joy_home = 4096;	// 12
 int joy_x = 8192;	// 13
 int joy_y = 16384;	// 14
+int joy_1 = 32768;	// 15
+int joy_2 = 65536;	// 16
 
 int     joybinvright = 0;
 int     joybfire = 1;
@@ -246,6 +248,7 @@ int	joybmapzoomin = 11;
 int	joybjump = 12;
 int	joybflyup = 13;
 int     joybinvleft = 14;
+int	joybspeed = 15;
 
 extern fixed_t mtof_zoommul;    // how far the window zooms in each tic (map coords)
 extern fixed_t ftom_zoommul;    // how far the window zooms in each tic (fb coords)
@@ -476,20 +479,50 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
     if(PlayerClass[consoleplayer] == PCLASS_FIGHTER)
     {
-	forwardmve = forwardmove;
-	sidemve = sidemove;
+	if (joybuttons[joybspeed]) 
+	{
+	    forwardmve = forwardmove * 6;
+	    sidemve = sidemove * 6;
+//	    turnspd = turnspeed * 6;
+	}
+	else if(!joybuttons[joybspeed])
+	{
+	    forwardmve = forwardmove;
+	    sidemve = sidemove;
+//	    turnspd = turnspeed;
+	}
 	turnspd = turnspeed;
     }
     else if(PlayerClass[consoleplayer] == PCLASS_CLERIC)
     {
-	forwardmve = forwardmove / 1.33;
-	sidemve = sidemove / 1.33;
+	if (joybuttons[joybspeed]) 
+	{
+	    forwardmve = forwardmove * 4;
+	    sidemve = sidemove * 4;
+//	    turnspd = turnspeed * 4;
+	}
+	else if(!joybuttons[joybspeed])
+	{
+	    forwardmve = forwardmove / 1.33;
+	    sidemve = sidemove / 1.33;
+//	    turnspd = turnspeed / 1.33;
+	}
 	turnspd = turnspeed / 1.33;
     }
     else if(PlayerClass[consoleplayer] == PCLASS_MAGE)
     {
-	forwardmve = forwardmove / 1.66;
-	sidemve = sidemove / 1.66;
+	if (joybuttons[joybspeed]) 
+	{
+	    forwardmve = forwardmove * 2;
+	    sidemve = sidemove * 2;
+//	    turnspd = turnspeed * 2;
+	}
+	else if(!joybuttons[joybspeed])
+	{
+	    forwardmve = forwardmove / 1.66;
+	    sidemve = sidemove / 1.66;
+//	    turnspd = turnspeed / 1.66;
+	}
 	turnspd = turnspeed / 1.66;
     }
 
@@ -1286,6 +1319,8 @@ boolean G_Responder(event_t * ev)
 	    joybuttons[12] = (ev->data1 & joy_home) > 0;
 	    joybuttons[13] = (ev->data1 & joy_x) > 0;
 	    joybuttons[14] = (ev->data1 & joy_y) > 0;
+	    joybuttons[15] = (ev->data1 & joy_1) > 0;
+	    joybuttons[16] = (ev->data1 & joy_2) > 0;
 	    joyxmove = ev->data2; 
 	    joyymove = ev->data3; 
             joyirx = ev->data4;
