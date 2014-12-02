@@ -752,27 +752,10 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
     WPADData *data = WPAD_Data(0);
 
-    if(data->exp.type == WPAD_EXP_CLASSIC && !demoplayback)
+    if(data->exp.type == WPAD_EXP_CLASSIC)
     {
 	if(data->btns_d)
 	{
-	    if(joybuttons[joybinvuse])
-	    {                           // flag to denote that it's okay to use an artifact
-		if (inventory)
-		{
-		    players[consoleplayer].readyArtifact =
-			    players[consoleplayer].inventory[inv_ptr].type;
-		    inventory = false;
-		    cmd->arti = 0;
-		    usearti = false;
-		}
-		else /*if (usearti)*/
-		{
-		    cmd->arti = players[consoleplayer].inventory[inv_ptr].type;
-		    usearti = false;
-		}
-	    }
-
 	    if(joybuttons[joybmenu])
 	    {
 		if (!MenuActive)
@@ -795,53 +778,73 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 		}
 	    }
 
-	    if(joybuttons[joybright])
-		ChangeWeaponRight();
-
-	    if(joybuttons[joybleft])
-		ChangeWeaponLeft();
-
-	    if(joybuttons[joybinvright])
-		ChangeInventoryItemRight();
-
-	    if (joybuttons[joybinvleft])
-		ChangeInventoryItemLeft();
-
-	    if(joybuttons[joybcenter])
-		look = TOCENTER;
-
-	    if(joybuttons[joybmap])
+	    if(!demoplayback)
 	    {
-		if (!automapactive)
-		{
-		    if(!MenuActive)
-			AM_Start ();
-		}
-		else
-		{
-		    if(!MenuActive)
+		if(joybuttons[joybinvuse])
+		{                           // flag to denote that it's okay to use an artifact
+		    if (inventory)
 		    {
-			AM_Stop ();
-
-			extern int screenblocks;
-
-			R_SetViewSize (screenblocks, detailLevel);
+			players[consoleplayer].readyArtifact =
+				players[consoleplayer].inventory[inv_ptr].type;
+			inventory = false;
+			cmd->arti = 0;
+			usearti = false;
+		    }
+		    else /*if (usearti)*/
+		    {
+			cmd->arti = players[consoleplayer].inventory[inv_ptr].type;
+			usearti = false;
 		    }
 		}
-	    }
 
-	    if(automapactive)
-	    {
-		if(joybuttons[joybmapzoomin])
+		if(joybuttons[joybright])
+		    ChangeWeaponRight();
+
+		if(joybuttons[joybleft])
+		    ChangeWeaponLeft();
+
+		if(joybuttons[joybinvright])
+		    ChangeInventoryItemRight();
+
+		if(joybuttons[joybinvleft])
+		    ChangeInventoryItemLeft();
+
+		if(joybuttons[joybcenter])
+		    look = TOCENTER;
+
+		if(joybuttons[joybmap])
 		{
-		    mtof_zoommul = M_ZOOMIN;
-		    ftom_zoommul = M_ZOOMOUT;
+		    if (!automapactive)
+		    {
+			if(!MenuActive)
+			    AM_Start ();
+		    }
+		    else
+		    {
+			if(!MenuActive)
+			{
+			    AM_Stop ();
+
+			    extern int screenblocks;
+
+			    R_SetViewSize (screenblocks, detailLevel);
+			}
+		    }
 		}
 
-		if(joybuttons[joybmapzoomout])
+		if(automapactive)
 		{
-		    mtof_zoommul = M_ZOOMOUT;
-		    ftom_zoommul = M_ZOOMIN;
+		    if(joybuttons[joybmapzoomin])
+		    {
+			mtof_zoommul = M_ZOOMIN;
+			ftom_zoommul = M_ZOOMOUT;
+		    }
+
+		    if(joybuttons[joybmapzoomout])
+		    {
+			mtof_zoommul = M_ZOOMOUT;
+			ftom_zoommul = M_ZOOMIN;
+		    }
 		}
 	    }
 	}
