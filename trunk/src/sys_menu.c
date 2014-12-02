@@ -292,7 +292,7 @@ void Menu_FatDevice(void)
 	    printStyledText(8, 35,CONSOLE_FONT_BLACK,CONSOLE_FONT_GREEN,CONSOLE_FONT_BOLD,&stTexteLocation,"PWAD2: ");
 	    printf("\n                                 |\n");
 	    printStyledText(9, 35,CONSOLE_FONT_BLACK,CONSOLE_FONT_GREEN,CONSOLE_FONT_BOLD,&stTexteLocation,"PWAD3: ");
-	    printf("\n  B: continue. / Home: Quit.     |");
+	    printf("\n  A: continue. / Home: Quit.     |");
 	    printf("\n                                 |\n");
 	    printStyledText(11, 0,CONSOLE_FONT_BLACK,CONSOLE_FONT_WHITE,CONSOLE_FONT_BOLD,&stTexteLocation,"  ----------------------------------------------------------------------------  ");
 
