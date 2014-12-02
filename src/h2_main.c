@@ -134,6 +134,9 @@ SceCtrlData pad, lastpad;
 
 boolean debugmode = false;      // checkparm of -debug
 */
+boolean demos_are_disabled = true;
+boolean do_not_repeat_music = false;
+
 boolean nomonsters;             // checkparm of -nomonsters
 boolean randomclass;            // checkparm of -randclass
 boolean cmdfrag;                // true if a CMD_FRAG packet should be sent out
@@ -1217,7 +1220,14 @@ void H2_DoAdvanceDemo(void)
             pagetic = 280;
             gamestate = GS_DEMOSCREEN;
             pagename = "TITLE";
-            S_StartSongName("hexen", true);
+
+	    if(demos_are_disabled && !do_not_repeat_music)
+	    {
+//		S_StartSongName("hexen", true);		// ORIGINAL CODE
+		S_StartSongName("hexen", false);	// MODIFIED CODE
+		do_not_repeat_music = true;
+	    }
+
             break;
         case 1:
             pagetic = 210;

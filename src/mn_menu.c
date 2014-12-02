@@ -291,6 +291,7 @@ extern default_t doom_defaults_list[];
 //int mhz333;
 int button_layout = 0;
 extern boolean am_rotate;
+extern boolean do_not_repeat_music;
 //extern int loading_disk;
 static int FirstKey = 0;
 static boolean askforkey = false;
@@ -3247,6 +3248,7 @@ static void SCEndGame(int option)
             paused = true;
         }
     }
+    do_not_repeat_music = false;
 }
 
 //---------------------------------------------------------------------------
