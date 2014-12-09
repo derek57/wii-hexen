@@ -406,7 +406,7 @@ void R_InitTextures(void)
 
         totalwidth += texture->width;
 
-	I_Sleep(5);
+//	I_Sleep(5);
     }
 
     Z_Free(patchlookup);
@@ -511,7 +511,7 @@ void R_InitSpriteLumps(void)
         spriteoffset[i] = SHORT(patch->leftoffset) << FRACBITS;
         spritetopoffset[i] = SHORT(patch->topoffset) << FRACBITS;
 
-	I_Sleep(3);
+//	I_Sleep(3);
     }
 }
 
@@ -551,11 +551,11 @@ void R_InitColormaps(void)
 void R_InitData(void)
 {
     R_InitTextures();
-    I_Sleep(5);
+//    I_Sleep(5);
     R_InitFlats();
-    I_Sleep(5);
+//    I_Sleep(5);
     R_InitSpriteLumps();
-    I_Sleep(5);
+//    I_Sleep(5);
     R_InitColormaps();
 }
 

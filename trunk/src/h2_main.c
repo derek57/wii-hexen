@@ -625,7 +625,7 @@ void D_DoomMain(void)
 	ST_Message("I_Init: Setting up machine state.\n");
 //    I_CheckIsScreensaver();
     I_InitTimer();
-    I_Sleep(500);
+//    I_Sleep(500);
 //    I_InitJoystick();
 /*
 #ifdef FEATURE_MULTIPLAYER
@@ -696,7 +696,7 @@ void D_DoomMain(void)
     	ST_Message("P_Init: Init Playloop state.\n");
     P_Init();
 
-    I_Sleep(1000);
+//    I_Sleep(1000);
 
     // Check for command line warping. Follows P_Init() because the
     // MAPINFO.TXT script must be already processed.
@@ -705,7 +705,7 @@ void D_DoomMain(void)
     if(debugmode)
         ST_Message("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame();
-    I_Sleep(250);
+//    I_Sleep(250);
 
     if(debugmode)
         ST_Message("SB_Init: Loading patches.\n");
