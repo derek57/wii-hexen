@@ -681,20 +681,20 @@ int screenblocks = 10;
 void R_Init(void)
 {
     R_InitData();
-    I_Sleep(5);
+//    I_Sleep(5);
     R_InitPointToAngle();
-    I_Sleep(5);
+//    I_Sleep(5);
     R_InitTables();
-    I_Sleep(5);
+//    I_Sleep(5);
     // viewwidth / viewheight / detailLevel are set by the defaults
     R_SetViewSize(screenblocks, detailLevel);
     R_InitPlanes();
-    I_Sleep(5);
+//    I_Sleep(5);
     R_InitLightTables();
-    I_Sleep(5);
+//    I_Sleep(5);
     R_InitSkyMap();
     R_InitTranslationTables();
-    I_Sleep(5);
+//    I_Sleep(5);
     framecount = 0;
 }
 
