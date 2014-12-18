@@ -2094,6 +2094,8 @@ void G_LoadGame(int slot)
 //
 //==========================================================================
 
+boolean game_loaded = false;
+
 void G_DoLoadGame(void)
 {
     gameaction = ga_nothing;
@@ -2103,6 +2105,7 @@ void G_DoLoadGame(void)
         SV_UpdateRebornSlot();
     }
     SB_SetClassData();
+    game_loaded = true;
 }
 
 //==========================================================================
