@@ -37,6 +37,8 @@
 
 #include "i_swap.h"
 
+#include "deh_str.h"
+
 // TYPES -------------------------------------------------------------------
 /*
 typedef struct Cheat_s
@@ -1026,6 +1028,8 @@ void DrawCommonBar(void)
 //
 //==========================================================================
 
+extern boolean game_loaded;
+
 void DrawMainBar(void)
 {
 //    int i;				// CHANGED FOR HIRES
@@ -1058,6 +1062,18 @@ void DrawMainBar(void)
             V_DrawPatch(143, 163, 
                         W_CacheLumpName(patcharti[CPlayer->readyArtifact],
                                         PU_CACHE));
+
+	    if(game_loaded)		// THIS FIXES A WII BUG WITH THE INVENTORY
+	    {
+		int x = inv_ptr - curpos;
+		char *patch = DEH_String(patcharti[CPlayer->inventory[x].type]);
+
+		V_DrawPatch(144, 160, PatchARTICLEAR);
+		V_DrawPatch(143, 163, W_CacheLumpName(patch, PU_CACHE));
+
+		game_loaded = false;
+	    }
+
             if (CPlayer->inventory[inv_ptr].count > 1)
             {
                 DrSmallNumber(CPlayer->inventory[inv_ptr].count, 162, 184);
