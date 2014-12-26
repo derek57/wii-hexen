@@ -1,9 +1,7 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
-// Copyright(C) 2008 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -15,12 +13,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
-//-----------------------------------------------------------------------------
 
 
 // HEADER FILES ------------------------------------------------------------
@@ -54,7 +46,6 @@ static void PlayerLandedOnThing(mobj_t * mo, mobj_t * onmobj);
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 extern mobj_t LavaInflictor;
-extern boolean	demorecording;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -321,14 +312,14 @@ boolean P_SeekerMissile(mobj_t * actor, angle_t thresh, angle_t turnMax)
     angle_t angle;
     mobj_t *target;
 
-    target = (mobj_t *)actor->special1;
+    target = actor->special1.m;
     if (target == NULL)
     {
         return (false);
     }
     if (!(target->flags & MF_SHOOTABLE))
     {                           // Target died
-        actor->special1 = 0;
+        actor->special1.m = NULL;
         return (false);
     }
     dir = P_FaceMobj(actor, target, &delta);
@@ -574,7 +565,7 @@ void P_XYMovement(mobj_t * mo)
 //                                      mo->momz = -mo->momz;
                     if (mo->flags2 & MF2_SEEKERMISSILE)
                     {
-			mo->special1 = (int)(mo->target);
+                        mo->special1.m = mo->target;
                     }
                     mo->target = BlockingMobj;
                     return;
@@ -834,15 +825,7 @@ void P_ZMovement(mobj_t * mo)
                         S_StartSound(mo, SFX_PLAYER_LAND);
                     }
                     // haleyjd: removed externdriver crap
-//                    mo->player->centering = true;
-		    if (mouselook && !demorecording && !demoplayback)
-		    {
-			mo->player->centering = false;
-		    }
-		    else
-		    {
-			mo->player->centering = true;
-		    }
+                    mo->player->centering = true;
                 }
             }
             else if (mo->type >= MT_POTTERY1 && mo->type <= MT_POTTERY3)
@@ -992,9 +975,9 @@ void P_BlasterMobjThinker(mobj_t * mobj)
                     }
                     P_SpawnMobj(mobj->x, mobj->y, z, MT_MWANDSMOKE);
                 }
-                else if (!--mobj->special1)
+                else if (!--mobj->special1.i)
                 {
-                    mobj->special1 = 4;
+                    mobj->special1.i = 4;
                     z = mobj->z - 12 * FRACUNIT;
                     if (z < mobj->floorz)
                     {
@@ -1060,15 +1043,7 @@ static void PlayerLandedOnThing(mobj_t * mo, mobj_t * onmobj)
         S_StartSound(mo, SFX_PLAYER_LAND);
     }
     // haleyjd: removed externdriver crap
-//    mo->player->centering = true;
-    if (mouselook && !demorecording && !demoplayback)
-    {
-	mo->player->centering = false;
-    }
-    else
-    {
-	mo->player->centering = true;
-    }
+    mo->player->centering = true;
 }
 
 //----------------------------------------------------------------------------
@@ -1102,7 +1077,7 @@ void P_MobjThinker(mobj_t * mobj)
     if (mobj->flags2 & MF2_FLOATBOB)
     {                           // Floating item bobbing motion (special1 is height)
         mobj->z = mobj->floorz +
-            mobj->special1 + FloatBobOffsets[(mobj->health++) & 63];
+            mobj->special1.i + FloatBobOffsets[(mobj->health++) & 63];
     }
     else if ((mobj->z != mobj->floorz) || mobj->momz || BlockingMobj)
     {                           // Handle Z momentum and gravity
@@ -1458,6 +1433,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
         return;
     }
     // Check for player starts 5 to 8
+/*							// HACK FOR DEMO & BETA COMPATIBILITY
     if (mthing->type >= 9100 && mthing->type <= 9103)
     {
         mapthing_t *player_start;
@@ -1469,13 +1445,13 @@ void P_SpawnMapThing(mapthing_t * mthing)
         memcpy(player_start, mthing, sizeof(mapthing_t));
         player_start->type = player + 1;
 
-        if (/*!deathmatch &&*/ !player_start->arg1)
+        if (!deathmatch && !player_start->arg1)
         {
             P_SpawnPlayer(player_start);
         }
         return;
     }
-
+*/
     if (mthing->type >= 1400 && mthing->type < 1410)
     {
         R_PointInSubsector(mthing->x << FRACBITS,
@@ -1556,24 +1532,24 @@ void P_SpawnMapThing(mapthing_t * mthing)
         }
     }
 
-    if(HEXEN_BETA && gamemap == 13 && mthing->type == 112)	// HACK for HEXEN RETAIL STORE BETA #3:
-    {								// On the map "SHADOW WOOD" there is a
-								// THING with ID #112 in the HUB's exit
-								// room which represents a FLY. Since
-								// the code for this FLY is missing and
-	return;							// said THING isn't even included in
-								// the map of the DOS FINAL version, we
-								// must deactivate the spawning of that
-								// THING, because in any other case the
-    }								// game would crash upon map loading.
+    if ((HEXEN_BETA && gamemap == 13 &&	// HACK for HEXEN RETAIL STORE BETA #3: On the map "SHADOW WOOD"
+	mthing->type == 112)	||	// there is a THING with ID #112 in the HUB's exit room which
+	mthing->type == 9100	||	// represents a FLY. Since the code for this FLY is missing and
+	mthing->type == 9101	||	// said THING isn't even included in the map of the DOS FINAL
+	mthing->type == 9102	||	// version, we must deactivate the spawning of that THING,
+	mthing->type == 9103)		// because in any other case the game would crash upon map
+    {					// loading. We also need to disable spawning of the player
+	return;				// starts 5, 6, 7 and 8 for DEMO & BETA compatibility.
+    }
 
     if (i == NUMMOBJTYPES)
     {                           // Can't find thing type
         I_Error("P_SpawnMapThing: Unknown type %i at (%i, %i)",
                 mthing->type, mthing->x, mthing->y);
     }
-/*
+
     // Don't spawn keys and players in deathmatch
+/*
     if (deathmatch && mobjinfo[i].flags & MF_NOTDMATCH)
     {
         return;
@@ -1630,7 +1606,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
     if (mobj->flags2 & MF2_FLOATBOB)
     {                           // Seed random starting index for bobbing motion
         mobj->health = P_Random();
-        mobj->special1 = mthing->height << FRACBITS;
+        mobj->special1.i = mthing->height << FRACBITS;
     }
     if (mobj->tics > 0)
     {

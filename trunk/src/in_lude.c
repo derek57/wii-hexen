@@ -175,17 +175,20 @@ static char *ClusMsgLumpNames[] = {
 */
 static void InitStats(void)
 {
-//    int i;
-//    int j;
+/*
+    int i;
+    int j;
+*/
     int oldCluster;
-//    signed int slaughterfrags;
-//    int posnum;
-//    int slaughtercount;
-//    int playercount;
-//    char *msgLumpName;
-//    int msgSize;
-//    int msgLump;
-
+/*
+    signed int slaughterfrags;
+    int posnum;
+    int slaughtercount;
+    int playercount;
+    char *msgLumpName;
+    int msgSize;
+    int msgLump;
+*/
     extern int LeaveMap;
 
 //    if (!deathmatch)
@@ -421,7 +424,8 @@ void IN_Drawer(void)
         return;
     }
     UpdateState |= I_FULLSCRN;
-    memcpy(I_VideoBuffer, (byte *) patchINTERPIC, SCREENWIDTH * SCREENHEIGHT);
+//    memcpy(I_VideoBuffer, (byte *) patchINTERPIC, SCREENWIDTH * SCREENHEIGHT);	// WII BUG
+    V_DrawRawScreen((byte *) patchINTERPIC);						// FIX FOR WII
 
     if (gametype == SINGLE)
     {

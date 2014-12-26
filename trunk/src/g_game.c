@@ -817,13 +817,17 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 		    if (!automapactive)
 		    {
 			if(!MenuActive)
+			{
 			    AM_Start ();
+			    SB_state = -1;
+			}
 		    }
 		    else
 		    {
 			if(!MenuActive)
 			{
 			    AM_Stop ();
+			    SB_state = -1;
 
 			    extern int screenblocks;
 
@@ -1608,7 +1612,7 @@ void G_PlayerExitMap(int playerNumber)
 
     if (player->morphTics)
     {
-        player->readyweapon = player->mo->special1;     // Restore weapon
+        player->readyweapon = player->mo->special1.i;     // Restore weapon
         player->morphTics = 0;
     }
     player->messageTics = 0;

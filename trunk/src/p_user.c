@@ -1,9 +1,7 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
-// Copyright(C) 2008 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -15,12 +13,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
-//-----------------------------------------------------------------------------
 
 
 #include "h2def.h"
@@ -28,8 +20,6 @@
 #include "i_system.h"
 #include "p_local.h"
 #include "s_sound.h"
-
-extern boolean MenuActive;
 
 void P_PlayerNextArtifact(player_t * player);
 
@@ -435,14 +425,14 @@ void P_DeathThink(player_t * player)
             newtorchdelta = 0;
         }
         player->playerstate = PST_REBORN;
-        player->mo->special1 = player->class;
-        if (player->mo->special1 > 2)
+        player->mo->special1.i = player->class;
+        if (player->mo->special1.i > 2)
         {
-            player->mo->special1 = 0;
+            player->mo->special1.i = 0;
         }
         // Let the mobj know the player has entered the reborn state.  Some
         // mobjs need to know when it's ok to remove themselves.
-        player->mo->special2 = 666;
+        player->mo->special2.i = 666;
     }
 }
 
@@ -526,7 +516,7 @@ boolean P_UndoPlayerMorph(player_t * player)
     y = pmo->y;
     z = pmo->z;
     angle = pmo->angle;
-    weapon = pmo->special1;
+    weapon = pmo->special1.i;
     oldFlags = pmo->flags;
     oldFlags2 = pmo->flags2;
     oldBeast = pmo->type;
@@ -554,7 +544,7 @@ boolean P_UndoPlayerMorph(player_t * player)
         mo = P_SpawnMobj(x, y, z, oldBeast);
         mo->angle = angle;
         mo->health = player->health;
-        mo->special1 = weapon;
+        mo->special1.i = weapon;
         mo->player = player;
         mo->flags = oldFlags;
         mo->flags2 = oldFlags2;
@@ -694,10 +684,10 @@ void P_PlayerThink(player_t * player)
                     speedMo->flags |= playerNum << MF_TRANSSHIFT;
                 }
                 speedMo->target = pmo;
-                speedMo->special1 = player->class;
-                if (speedMo->special1 > 2)
+                speedMo->special1.i = player->class;
+                if (speedMo->special1.i > 2)
                 {
-                    speedMo->special1 = 0;
+                    speedMo->special1.i = 0;
                 }
                 speedMo->sprite = pmo->sprite;
                 speedMo->floorclip = pmo->floorclip;
@@ -749,42 +739,38 @@ void P_PlayerThink(player_t * player)
         default:
             break;
     }
+    if (cmd->arti)
+    {                           // Use an artifact
+        if ((cmd->arti & AFLAG_JUMP) && onground && !player->jumpTics)
+        {
+            if (player->morphTics)
+            {
+                player->mo->momz = 6 * FRACUNIT;
+            }
+            else
+            {
+                player->mo->momz = 9 * FRACUNIT;
+            }
+            player->mo->flags2 &= ~MF2_ONMOBJ;
+            player->jumpTics = 18;
+        }
+        else if (cmd->arti & AFLAG_SUICIDE)
+        {
+            P_DamageMobj(player->mo, NULL, NULL, 10000);
+        }
+        if (cmd->arti == NUMARTIFACTS)
+        {                       // use one of each artifact (except puzzle artifacts)
+            int i;
 
-    if(!MenuActive)
-    {
-	if (cmd->arti)
-	{                           // Use an artifact
-    	    if ((cmd->arti & AFLAG_JUMP) && onground && !player->jumpTics)
-    	    {
-            	if (player->morphTics)
-            	{
-            	    player->mo->momz = 6 * FRACUNIT;
-            	}
-            	else
-            	{
-            	    player->mo->momz = 9 * FRACUNIT;
-            	}
-            	player->mo->flags2 &= ~MF2_ONMOBJ;
-            	player->jumpTics = 18;
-    	    }
-    	    else if (cmd->arti & AFLAG_SUICIDE)
-    	    {
-            	P_DamageMobj(player->mo, NULL, NULL, 10000);
-    	    }
-    	    if (cmd->arti == NUMARTIFACTS)
-    	    {                       // use one of each artifact (except puzzle artifacts)
-            	int i;
-
-            	for (i = 1; i < arti_firstpuzzitem; i++)
-            	{
-        	    P_PlayerUseArtifact(player, i);
-            	}
-    	    }
-    	    else
-    	    {
-        	P_PlayerUseArtifact(player, cmd->arti & AFLAG_MASK);
-    	    }
-	}
+            for (i = 1; i < arti_firstpuzzitem; i++)
+            {
+                P_PlayerUseArtifact(player, i);
+            }
+        }
+        else
+        {
+            P_PlayerUseArtifact(player, cmd->arti & AFLAG_MASK);
+        }
     }
     // Check for weapon change
     if (cmd->buttons & BT_SPECIAL)
@@ -980,8 +966,10 @@ void P_PlayerThink(player_t * player)
 
 void P_ArtiTele(player_t * player)
 {
-//    int i;
-//    int selections;
+/*
+    int i;
+    int selections;
+*/
     fixed_t destX;
     fixed_t destY;
     angle_t destAngle;
@@ -1047,9 +1035,10 @@ void P_TeleportToPlayerStarts(mobj_t * victim)
     P_Teleport(victim, destX, destY, destAngle, true);
     //S_StartSound(NULL, sfx_wpnup); // Full volume laugh
 }
-/*
+
 void P_TeleportToDeathmatchStarts(mobj_t * victim)
 {
+/*
     int i, selections;
     fixed_t destX, destY;
     angle_t destAngle;
@@ -1065,11 +1054,12 @@ void P_TeleportToDeathmatchStarts(mobj_t * victim)
         //S_StartSound(NULL, sfx_wpnup); // Full volume laugh
     }
     else
+*/
     {
         P_TeleportToPlayerStarts(victim);
     }
 }
-*/
+
 
 
 //----------------------------------------------------------------------------
@@ -1100,7 +1090,7 @@ void P_TeleportOther(mobj_t * victim)
         }
 
         // Send all monsters to deathmatch spots
-//        P_TeleportToDeathmatchStarts(victim);
+        P_TeleportToDeathmatchStarts(victim);
     }
 }
 
@@ -1153,7 +1143,7 @@ void P_BlastMobj(mobj_t * source, mobj_t * victim, fixed_t strength)
                     return;
                     break;
                 case MT_MSTAFF_FX2:    // Reflect to originator
-		    victim->special1 = (int)victim->target;	
+                    victim->special1.m = victim->target;
                     victim->target = source;
                     break;
                 default:
@@ -1162,9 +1152,9 @@ void P_BlastMobj(mobj_t * source, mobj_t * victim, fixed_t strength)
         }
         if (victim->type == MT_HOLY_FX)
         {
-	    if ((mobj_t *)(victim->special1) == source)
+            if (victim->special1.m == source)
             {
-		victim->special1 = (int)victim->target;	
+                victim->special1.m = victim->target;
                 victim->target = source;
             }
         }
@@ -1525,7 +1515,7 @@ boolean P_UseArtifact(player_t * player, artitype_t arti)
             if (mo)
             {
                 mo->target = player->mo;
-		mo->special1 = (int)(player->mo);
+                mo->special1.m = (player->mo);
                 mo->momz = 5 * FRACUNIT;
             }
             break;
