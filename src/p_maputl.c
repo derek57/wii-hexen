@@ -1,9 +1,7 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
-// Copyright(C) 2008 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -15,12 +13,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
-//-----------------------------------------------------------------------------
 
 
 #include "h2def.h"
@@ -963,8 +955,8 @@ static mobj_t *RoughBlockCheck(mobj_t * mo, int index)
                     link = link->bnext;
                     continue;
                 }
-		if ((link->type == MT_MINOTAUR) &&
-			(((mobj_t *)link->special1) == mo))
+                if ((link->type == MT_MINOTAUR) &&
+                    (link->special1.m == mo))
                 {
                     link = link->bnext;
                     continue;
@@ -985,7 +977,7 @@ static mobj_t *RoughBlockCheck(mobj_t * mo, int index)
         }
         else if (mo->type == MT_MINOTAUR)       // looking around minotaur
         {
-	    master = (mobj_t *)mo->special1;
+            master = mo->special1.m;
             if ((link->flags & MF_COUNTKILL) ||
                 (link->player && (link != master)))
             {
@@ -1000,7 +992,7 @@ static mobj_t *RoughBlockCheck(mobj_t * mo, int index)
                     continue;
                 }
                 if ((link->type == MT_MINOTAUR) &&
-                    (link->special1 == mo->special1))
+                    (link->special1.m == mo->special1.m))
                 {
                     link = link->bnext;
                     continue;
@@ -1036,7 +1028,8 @@ static mobj_t *RoughBlockCheck(mobj_t * mo, int index)
                     link = link->bnext;
                     continue;
                 }
-                else*/ if (P_CheckSight(mo, link))
+                else
+*/		if (P_CheckSight(mo, link))
                 {
                     master = mo->target;
                     angle = R_PointToAngle2(master->x, master->y,

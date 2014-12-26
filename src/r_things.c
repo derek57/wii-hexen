@@ -1,9 +1,7 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
-// Copyright(C) 2008 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -15,12 +13,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
-//-----------------------------------------------------------------------------
 
 
 #include <stdio.h>
@@ -206,6 +198,7 @@ void R_InitSpriteDefs(char **namelist)
         {
             //continue;
             sprites[i].numframes = 0;
+//            if (gamemode == shareware)
 	    if(HEXEN_DEMO || HEXEN_BETA || HEXEN_BETA_DEMO || HEXEN_MACDEMO)
                 continue;
             I_Error("R_InitSprites: No lumps found for sprite %s",
@@ -574,7 +567,7 @@ void R_ProjectSprite(mobj_t * thing)
         }
         else
         {
-            vis->class = thing->special1;
+            vis->class = thing->special1.i;
         }
         if (vis->class > 2)
         {

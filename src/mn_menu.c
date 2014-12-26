@@ -1600,6 +1600,7 @@ void FPS(int FramesPerSecond)
     {
 	MN_DrTextA(fpsDisplay, 0, 30);
     }
+    BorderNeedRefresh = true;
 }
 
 void MN_Drawer(void)
@@ -1676,7 +1677,7 @@ void MN_Drawer(void)
 	gamestate == GS_LEVEL))
     {
 	MN_DrTextA(BETA_FLASH_TEXT,160-(MN_TextAWidth(BETA_FLASH_TEXT)>>1), 12);// DISPLAYS BLINKING
-										// "BETA" MESSAGE
+	BorderNeedRefresh = true;						// "BETA" MESSAGE
     }
 
     if((HEXEN_BETA && MenuActive) || (HEXEN_BETA_DEMO && MenuActive))
@@ -1751,6 +1752,7 @@ void MN_Drawer(void)
                            MN_TextAWidth(SlotText[quicksave - 1]) / 2, 90);
             }
 */
+	    BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
         }
 	if(askforsave)
@@ -2414,7 +2416,7 @@ static void DrawControlMenu(void)
 
     MN_DrTextB(mlooktext[mouselook], 150, 124);
 
-    DrawSlider(&ControlMenu, 8, 9, mspeed-2);
+    DrawSlider(&ControlMenu, 8, 9, mspeed);
 
     SB_state = -1;
     UpdateState |= I_FULLSCRN;

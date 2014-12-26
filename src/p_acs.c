@@ -306,7 +306,7 @@ static int (*PCodeCmds[]) (void) =
         CmdSetLineBlocking,
         CmdSetLineSpecial,
 	CmdThingSound,
-	CmdEndPrintBold
+	CmdEndPrintBold,
 };
 
 // CODE --------------------------------------------------------------------

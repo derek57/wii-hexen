@@ -142,6 +142,10 @@
 					// ...of the IWAD's mentioned above is being loaded and the...
 					// ...player class changed to either "CLERIC" or "MAGE": THE...
 					// ...GAME WILL CRASH INSTANTLY!!!!!
+					//
+					// "MAX_PLAYER_STARTS" ALSO NEEDS TO BE RESET FROM 8 TO 4,...
+					// ...WE ALSO NEED TO DISABLE THE CHECK FOR PLAYER STARTS...
+					// 5, 6, 7 & 8 AND THEIR RESPECTIVE SPAWNING IN P_MOBJ.C
 #define	BT_ATTACK		1
 #define	BT_USE			2
 #define	BT_CHANGE		4       // if true, the next 3 bits hold weapon num
@@ -260,14 +264,14 @@ typedef struct thinker_s
 } thinker_t;
 
 struct player_s;
-/*
+
 typedef union
 {
     int i;
     struct mobj_s *m;
     struct player_s *p;
 } specialval_t;
-*/
+
 typedef struct mobj_s
 {
     thinker_t thinker;          // thinker node
@@ -294,8 +298,8 @@ typedef struct mobj_s
     int damage;                 // For missiles
     int flags;
     int flags2;                 // Heretic flags
-    /*specialval_t*/ int special1;      // Special info
-    /*specialval_t*/ int special2;      // Special info
+    specialval_t special1;      // Special info
+    specialval_t special2;      // Special info
     int health;
     int movedir;                // 0-7
     int movecount;              // when 0, select a new dir
@@ -740,15 +744,15 @@ extern int levelstarttic;       // gametic at level start
 extern int leveltime;           // tics in game play for par
 
 extern ticcmd_t *netcmds;
-
+/*
 #define MAXDEATHMATCHSTARTS 16
 extern mapthing_t *deathmatch_p;
 extern mapthing_t deathmatchstarts[MAXDEATHMATCHSTARTS];
-
+*/
 // Position indicator for cooperative net-play reborn
 extern int RebornPosition;
 
-#define MAX_PLAYER_STARTS 8
+#define MAX_PLAYER_STARTS /*8*/4				// HACK FOR DEMO & BETA COMPATIBILITY
 extern mapthing_t playerstarts[MAX_PLAYER_STARTS][MAXPLAYERS];
 
 extern int mouseSensitivity;

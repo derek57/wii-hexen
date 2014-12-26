@@ -1,9 +1,7 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
-// Copyright(C) 2008 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -15,12 +13,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
-//-----------------------------------------------------------------------------
 
 
 #include "h2def.h"
@@ -412,13 +404,13 @@ boolean PIT_CheckThing(mobj_t * thing)
                 if (thing->flags2 & MF2_REFLECTIVE
                     && (thing->player || thing->flags2 & MF2_BOSS))
                 {
-		    tmthing->special1 = (int)tmthing->target;
+                    tmthing->special1.m = tmthing->target;
                     tmthing->target = thing;
                     return true;
                 }
                 if (thing->flags & MF_COUNTKILL || thing->player)
                 {
-		    tmthing->special1 = (int)thing;
+                    tmthing->special1.m = thing;
                 }
                 if (P_Random() < 96)
                 {
@@ -449,7 +441,7 @@ boolean PIT_CheckThing(mobj_t * thing)
                 }
                 if (thing->health <= 0)
                 {
-                    tmthing->special1 = 0;
+                    tmthing->special1.i = 0;
                 }
             }
             return true;
@@ -551,16 +543,15 @@ boolean PIT_CheckThing(mobj_t * thing)
                 }
                 if (tmthing->type == MT_LIGHTNING_FLOOR)
                 {
-		    if(tmthing->special2 
-			    && !((mobj_t *)tmthing->special2)->special1)
-		    {
-			((mobj_t *)tmthing->special2)->special1 = 
-				(int)thing;
-		    }
+                    if (tmthing->special2.m
+                        && !tmthing->special2.m->special1.m)
+                    {
+                        tmthing->special2.m->special1.m = thing;
+                    }
                 }
-                else if (!tmthing->special1)
+                else if (!tmthing->special1.m)
                 {
-		    tmthing->special1 = (int)thing;
+                    tmthing->special1.m = thing;
                 }
             }
             return true;        // lightning zaps through all sprites
@@ -571,20 +562,20 @@ boolean PIT_CheckThing(mobj_t * thing)
 
             if (thing->flags & MF_SHOOTABLE && thing != tmthing->target)
             {
-		lmo = (mobj_t *)tmthing->special2;
+                lmo = tmthing->special2.m;
                 if (lmo)
                 {
                     if (lmo->type == MT_LIGHTNING_FLOOR)
                     {
-			if(lmo->special2 
-				&& !((mobj_t *)lmo->special2)->special1)
-			{
-			    ((mobj_t *)lmo->special2)->special1 = (int)thing;
-			}
+                        if (lmo->special2.m
+                            && !lmo->special2.m->special1.m)
+                        {
+                            lmo->special2.m->special1.m = thing;
+                        }
                     }
-                    else if (!lmo->special1)
+                    else if (!lmo->special1.m)
                     {
-			lmo->special1 = (int)thing;
+                        lmo->special1.m = thing;
                     }
                     if (!(leveltime & 3))
                     {
@@ -2058,17 +2049,14 @@ boolean PTR_PuzzleItemTraverse(intercept_t * in)
         {                       // Item type doesn't match
             return false;
         }
-/*
-        P_StartACS(in->d.line->arg2, 0, &in->d.line->arg3,
-                   PuzzleItemUser, in->d.line, 0);
-*/
-	// Construct an args[] array that would contain the values from
-	// the line that would be passed by Vanilla Hexen.
-	args[0] = in->d.line->arg3;
-	args[1] = in->d.line->arg4;
-	args[2] = in->d.line->arg5;
 
-	P_StartACS(in->d.line->arg2, 0, args, PuzzleItemUser, in->d.line, 0);
+        // Construct an args[] array that would contain the values from
+        // the line that would be passed by Vanilla Hexen.
+        args[0] = in->d.line->arg3;
+        args[1] = in->d.line->arg4;
+        args[2] = in->d.line->arg5;
+
+        P_StartACS(in->d.line->arg2, 0, args, PuzzleItemUser, in->d.line, 0);
         in->d.line->special = 0;
         PuzzleActivated = true;
         return false;           // Stop searching
@@ -2268,6 +2256,7 @@ boolean PIT_ChangeSector(mobj_t * thing)
 		    P_SetMobjState (thing, S_GIBS1);	// where ceilings are starting crunching dead
 		}					// bodies into gibs, so we have to disable it
 							// here in order to make the game not crash.
+                P_SetMobjState(thing, S_GIBS1);
                 thing->height = 0;
                 thing->radius = 0;
                 S_StartSound(thing, SFX_PLAYER_FALLING_SPLAT);
