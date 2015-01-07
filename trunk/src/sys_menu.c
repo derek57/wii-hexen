@@ -388,7 +388,7 @@ void Menu_WadList(void)
 {
     bool	md5_check = false;
 
-    char	line[BUFSIZ];
+    char	buffer[4];
     char	check[MAXPATH];
     char	iwad_term[] = "IWAD";
     char	pwad_term[] = "PWAD";
@@ -399,7 +399,6 @@ void Menu_WadList(void)
     char	stripped_extra_wad_2[256] = "";
     char	stripped_extra_wad_3[256] = "";
 //    char	stripped_dehacked_file[256] = "";
-    char	*temp;
     char	*tmpPath = malloc (MAX_FILE_PATH_LEN);
 
     const char	*iwad_ver = NULL;
@@ -421,6 +420,8 @@ void Menu_WadList(void)
     extern char known_md5_string_hexen_1_1_iwad[33];
     extern char known_md5_string_hexdd_1_0_iwad[33];
     extern char known_md5_string_hexdd_1_1_iwad[33];
+
+    int		i, c;
 /*
     int		installCnt = 0;
     int		uninstallCnt = 0;
@@ -930,11 +931,76 @@ void Menu_WadList(void)
 
 		if (file != NULL && !md5_check)
 		{
-		    while (fgets(line, sizeof(line), file))
+		    for (i = 0; i < 4; i++)
 		    {
-			temp = line;
+			c = fgetc(file);	// Get character
 
-			if (strncmp(iwad_term, temp, 4) == 0)
+			buffer[i] = c;		// Store characters in array
+
+			if (strncmp(iwad_term, buffer, 4) == 0)
+			{
+			    if(extra_wad_slot_1_loaded == 0)
+			    {
+				load_extra_wad = 1;
+
+				strcpy(extra_wad_1, check);
+				strcpy(stripped_extra_wad_1, tmpFile->filename);
+
+				extra_wad_slot_1_loaded = 1;
+
+				extra_wad_loaded = 1;
+
+				break;
+			    }
+			    else if(extra_wad_slot_1_loaded == 1 && extra_wad_slot_2_loaded == 0)
+			    {
+				if(strcmp(check, extra_wad_1) != 0)
+				{
+				    load_extra_wad = 1;
+
+				    strcpy(extra_wad_2, check);
+				    strcpy(stripped_extra_wad_2, tmpFile->filename);
+
+				    extra_wad_slot_2_loaded = 1;
+
+				    extra_wad_loaded = 1;
+				}
+/*
+				else
+				{
+				    strcpy(extra_wad_2, "");
+
+				    extra_wad_slot_2_loaded = 0;
+				}
+*/
+				break;
+			    }
+			    else if(extra_wad_slot_1_loaded == 1 && extra_wad_slot_2_loaded == 1
+								 && extra_wad_slot_3_loaded == 0)
+			    {
+				if((strcmp(check, extra_wad_1) != 0 && strcmp(check, extra_wad_2) != 0))
+				{
+				    load_extra_wad = 1;
+
+				    strcpy(extra_wad_3, check);
+				    strcpy(stripped_extra_wad_3, tmpFile->filename);
+
+				    extra_wad_slot_3_loaded = 1;
+
+				    extra_wad_loaded = 1;
+				}
+/*
+				else
+				{
+				    strcpy(extra_wad_3, "");
+
+				    extra_wad_slot_3_loaded = 0;
+				}
+*/
+				break;
+			    }
+			}
+			else if (strncmp(pwad_term, buffer, 4) == 0 && extra_wad_slot_1_loaded == 0)
 			{
 			    load_extra_wad = 1;
 
@@ -943,61 +1009,58 @@ void Menu_WadList(void)
 
 			    extra_wad_slot_1_loaded = 1;
 
-			    if(extra_wad_slot_1_loaded == 1)
+			    extra_wad_loaded = 1;
+
+			    break;
+			}
+			else if (strncmp(pwad_term, buffer, 4) == 0 && extra_wad_slot_1_loaded == 1
+								    && extra_wad_slot_2_loaded == 0)
+			{
+			    if(strcmp(check, extra_wad_1) != 0)
 			    {
+				load_extra_wad = 1;
+
 				strcpy(extra_wad_2, check);
 				strcpy(stripped_extra_wad_2, tmpFile->filename);
 
 				extra_wad_slot_2_loaded = 1;
-			    }
 
-			    if(extra_wad_slot_2_loaded == 1)
+				extra_wad_loaded = 1;
+			    }
+/*
+			    else
 			    {
+				strcpy(extra_wad_2, "");
+
+				extra_wad_slot_2_loaded = 0;
+			    }
+*/
+			    break;
+			}
+			else if (strncmp(pwad_term, buffer, 4) == 0 && extra_wad_slot_1_loaded == 1
+								    && extra_wad_slot_2_loaded == 1
+								    && extra_wad_slot_3_loaded == 0)
+			{
+			    if((strcmp(check, extra_wad_1) != 0 && strcmp(check, extra_wad_2) != 0))
+			    {
+				load_extra_wad = 1;
+
 				strcpy(extra_wad_3, check);
 				strcpy(stripped_extra_wad_3, tmpFile->filename);
 
 				extra_wad_slot_3_loaded = 1;
+
+				extra_wad_loaded = 1;
 			    }
+/*
+			    else
+			    {
+				strcpy(extra_wad_3, "");
 
-			    extra_wad_loaded = 1;
-
-//			    W_CheckSize(0);
-			}
-			else if (strncmp(pwad_term, temp, 4) == 0 && extra_wad_slot_1_loaded == 0)
-			{
-			    load_extra_wad = 1;
-
-			    strcpy(extra_wad_1, check);
-			    strcpy(stripped_extra_wad_1, tmpFile->filename);
-
-			    extra_wad_slot_1_loaded = 1;
-
-			    extra_wad_loaded = 1;
-			}
-			else if (strncmp(pwad_term, temp, 4) == 0 && extra_wad_slot_1_loaded == 1
-								  && extra_wad_slot_2_loaded == 0)
-			{
-			    load_extra_wad = 1;
-
-			    strcpy(extra_wad_2, check);
-			    strcpy(stripped_extra_wad_2, tmpFile->filename);
-
-			    extra_wad_slot_2_loaded = 1;
-
-			    extra_wad_loaded = 1;
-			}
-			else if (strncmp(pwad_term, temp, 4) == 0 && extra_wad_slot_1_loaded == 1
-								  && extra_wad_slot_2_loaded == 1
-								  && extra_wad_slot_3_loaded == 0)
-			{
-			    load_extra_wad = 1;
-
-			    strcpy(extra_wad_3, check);
-			    strcpy(stripped_extra_wad_3, tmpFile->filename);
-
-			    extra_wad_slot_3_loaded = 1;
-
-			    extra_wad_loaded = 1;
+				extra_wad_slot_3_loaded = 0;
+			    }
+*/
+			    break;
 			}
 /*
 			else if (strncmp(deh_term, temp, 23) == 0) 
@@ -1010,6 +1073,8 @@ void Menu_WadList(void)
 */
 		    }
 		}
+		memset(buffer, 0, sizeof(buffer));
+
 		fclose(file);
 	    }
 	}
@@ -1053,6 +1118,12 @@ void Menu_WadList(void)
 	    strcpy(extra_wad_2, "");
 	    strcpy(extra_wad_3, "");
 	    strcpy(target, "");
+
+	    extra_wad_slot_1_loaded = 0;
+	    extra_wad_slot_2_loaded = 0;
+	    extra_wad_slot_3_loaded = 0;
+
+	    extra_wad_loaded = 0;
 	}
 
 	/* List scrolling */
