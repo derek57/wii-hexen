@@ -59,6 +59,7 @@
 #include "w_wad.h"
 #include "deh_str.h"
 //#include "i_endoom.h"
+#include "c_io.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -119,6 +120,7 @@ extern boolean add_dk;
 
 extern int loading_disk;
 extern int warped;
+extern int mus_engine;
 //extern int ninty;
 
 extern char calculated_md5_string[33];
@@ -515,6 +517,16 @@ void D_DoomMain(void)
 
     M_LoadDefaults();
 
+    if(mus_engine > 1)
+	mus_engine = 2;
+    else if(mus_engine < 2)
+	mus_engine = 1;
+
+    if(mus_engine == 1)
+	snd_musicdevice = SNDDEVICE_SB;
+    else
+	snd_musicdevice = SNDDEVICE_GENMIDI;
+
     I_AtExit(M_SaveDefaults, false);
 
     if(debugmode)
@@ -526,6 +538,8 @@ void D_DoomMain(void)
     if(debugmode)
 	ST_Message("Z_Init: Init zone memory allocation daemon.\n");
     Z_Init();
+
+    C_Init();
 
     // haleyjd: removed WATCOMC
 /*
@@ -969,6 +983,8 @@ static void WarpCheck(void)
 //
 //==========================================================================
 
+/*static*/ void I_SDL_PollMusic(void);
+
 void H2_GameLoop(void)
 {
 //    if(debugmode)
@@ -988,6 +1004,10 @@ void H2_GameLoop(void)
 
     while (1)
     {
+	// check if the OGG music stopped playing
+	if(gamestate == GS_LEVEL && usergame)
+	    I_SDL_PollMusic();
+
         // Frame syncronous IO operations
         I_StartFrame();
 
@@ -1027,6 +1047,10 @@ void H2_ProcessEvents(void)
             continue;
         }
         if (MN_Responder(ev))
+        {
+            continue;
+        }
+        if (C_Responder(ev))
         {
             continue;
         }
@@ -1081,6 +1105,8 @@ static void DrawAndBlit(void)
         case GS_DEMOSCREEN:
             PageDrawer();
             break;
+        case GS_CONSOLE:
+            break;
     }
 /*
     if (testcontrols)
@@ -1109,6 +1135,8 @@ static void DrawAndBlit(void)
 
     // Draw current message
     DrawMessage();
+
+    C_Drawer();
 
     // Draw Menu
     MN_Drawer();

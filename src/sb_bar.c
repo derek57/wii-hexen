@@ -39,6 +39,10 @@
 
 #include "deh_str.h"
 
+#include "c_io.h"
+
+#define SB_TITLE	(P_GetMapName(gamemap))
+
 // TYPES -------------------------------------------------------------------
 /*
 typedef struct Cheat_s
@@ -2134,3 +2138,18 @@ static void CheatTrackFunc2(player_t * player, Cheat_t * cheat)
     }
 }
 */
+
+// sb_newlevel called when we enter a new level
+// determine the level name and display it in
+// the console
+
+void SB_NewLevel()
+{
+    // print the new level name into the console
+    C_Printf("\n");
+    C_Seperator();
+    C_Printf("%s\n\n", SB_TITLE);
+    C_InstaPopup();       // put console away
+//    C_Update();
+}
+

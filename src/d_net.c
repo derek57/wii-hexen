@@ -42,6 +42,8 @@
 
 #include "d_loop.h"
 
+#include "c_io.h"
+
 ticcmd_t *netcmds;
 
 extern void H2_DoAdvanceDemo(void);
@@ -98,6 +100,7 @@ static void RunTic(ticcmd_t *cmds, boolean *ingame)
     if (advancedemo)
         H2_DoAdvanceDemo ();
 
+    C_Ticker ();
     G_Ticker ();
 }
 

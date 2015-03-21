@@ -185,6 +185,9 @@
 #define SavePath11USB "usb:/apps/wiihexen/savegames/hexen.wad/hexndata/H_v1_1_R"
 #define SavePathDD10USB "usb:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_0_R"
 #define SavePathDD11USB "usb:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_1_R"
+#define SavePathRootIWADUSB "usb:/apps/wiihexen/IWAD"
+#define SavePathRootPWADUSB "usb:/apps/wiihexen/PWAD"
+#define SavePathRootMusicUSB "usb:/apps/wiihexen/hexen-music"
 #define SavePathRoot1SD "sd:/apps/wiihexen/savegames"
 #define SavePathRoot2SD "sd:/apps/wiihexen/savegames/hexen.wad"
 #define SavePathRoot3SD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata"
@@ -198,6 +201,9 @@
 #define SavePath11SD "sd:/apps/wiihexen/savegames/hexen.wad/hexndata/H_v1_1_R"
 #define SavePathDD10SD "sd:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_0_R"
 #define SavePathDD11SD "sd:/apps/wiihexen/savegames/hexen.wad/dkngdata/D_v1_1_R"
+#define SavePathRootIWADSD "sd:/apps/wiihexen/IWAD"
+#define SavePathRootPWADSD "sd:/apps/wiihexen/PWAD"
+#define SavePathRootMusicSD "sd:/apps/wiihexen/hexen-music"
 
 extern boolean HEXEN_BETA;
 extern boolean HEXEN_BETA_DEMO;
@@ -215,7 +221,8 @@ typedef enum
     GS_LEVEL,
     GS_INTERMISSION,
     GS_FINALE,
-    GS_DEMOSCREEN
+    GS_DEMOSCREEN,
+    GS_CONSOLE
 } gamestate_t;
 
 typedef enum

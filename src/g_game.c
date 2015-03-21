@@ -41,6 +41,8 @@
 #include "p_local.h"
 #include "v_video.h"
 
+#include "c_io.h"
+
 //#define AM_STARTKEY	9
 
 // External functions
@@ -249,6 +251,7 @@ int	joybjump = 12;
 int	joybflyup = 13;
 int     joybinvleft = 14;
 int	joybspeed = 15;
+int	joybconsole = 16;
 
 extern fixed_t mtof_zoommul;    // how far the window zooms in each tic (map coords)
 extern fixed_t ftom_zoommul;    // how far the window zooms in each tic (fb coords)
@@ -756,6 +759,18 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     {
 	if(data->btns_d)
 	{
+	    if(joybuttons[joybconsole])
+	    {
+		if(!MenuActive)
+		{
+		    if (!consoleactive)
+		    {
+			C_SetConsole();
+			S_StartSound(NULL, SFX_DOOR_METAL_OPEN);
+		    }
+		}
+	    }
+
 	    if(joybuttons[joybmenu])
 	    {
 		if (!MenuActive)
@@ -1542,6 +1557,8 @@ void G_Ticker(void)
             break;
         case GS_DEMOSCREEN:
             H2_PageTicker();
+            break;
+        case GS_CONSOLE:
             break;
     }
 }

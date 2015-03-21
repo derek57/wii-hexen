@@ -40,6 +40,8 @@
 
 #include "v_video.h"
 
+#include "c_io.h"
+
 // MACROS ------------------------------------------------------------------
 
 #define MAPINFO_SCRIPT_NAME "MAPINFO"
@@ -68,6 +70,7 @@
 #define DEFAULT_FADE_TABLE "COLORMAP"
 
 extern boolean from_menu;
+extern boolean mus_cheat_used;
 
 // TYPES -------------------------------------------------------------------
 
@@ -689,6 +692,8 @@ void P_GroupLines(void)
 =================
 */
 
+void SB_NewLevel();
+
 void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 {
     int i/*, j*/;
@@ -698,6 +703,8 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 //    mobj_t *mobj;
 
 //    blank = W_CacheLumpName("BLANK", PU_CACHE);
+
+    mus_cheat_used = false;
 
     for (i = 0; i < MAXPLAYERS; i++)
     {
@@ -806,6 +813,10 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 
     S_StopAllSound();
     SN_StopAllSequences();
+
+    C_Printf(" SB_NEWLEVEL EXECUTED\n");
+
+    SB_NewLevel();
 /*
     if(ninty == 1)
     {

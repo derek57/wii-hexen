@@ -294,6 +294,7 @@ extern int forwardmove;
 extern int sidemove;
 extern int turnspeed;
 extern int crosshair;
+extern int mus_engine;
 
 extern int joy_up;
 extern int joy_down;
@@ -349,6 +350,7 @@ void M_BindBaseControls(void)
     M_BindVariable("vanilla_weapon_change",  &use_vanilla_weapon_change);
     M_BindVariable("wii_light",              &wiilight);
     M_BindVariable("xhair",                  &crosshair);
+    M_BindVariable("music_engine",           &mus_engine);
     M_BindVariable("key_fire",               &joy_r);
     M_BindVariable("key_use",                &joy_l);
     M_BindVariable("key_menu",               &joy_minus);
@@ -365,6 +367,7 @@ void M_BindBaseControls(void)
     M_BindVariable("key_look_center",        &joy_up);
     M_BindVariable("key_jump",               &joy_home);
     M_BindVariable("key_run",                &joy_1);
+    M_BindVariable("key_console",            &joy_2);
 /*
     M_BindVariable("use_mouse",                 &usemouse);
     M_BindVariable("key_invDrop",        &key_invdrop);

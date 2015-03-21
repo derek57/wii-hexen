@@ -22,6 +22,9 @@
 //
 //-----------------------------------------------------------------------------
 
+
+#include <ctype.h>
+
 #include "h2def.h"
 #include "m_random.h"
 //#include "i_cdmus.h"
@@ -34,6 +37,8 @@
 #include "p_local.h"            // for P_AproxDistance
 #include "sounds.h"
 #include "s_sound.h"
+
+#include "c_io.h"
 
 #define PRIORITY_MAX_ADJUST 10
 #define DIST_ADJUST (MAX_SND_DIST/PRIORITY_MAX_ADJUST)
@@ -74,6 +79,7 @@ void S_ShutDown(void);
 //byte *soundCurve;
 
 extern boolean from_menu;
+extern boolean change_anyway;
 
 extern sfxinfo_t S_sfx[];
 extern musicinfo_t S_music[];
@@ -151,6 +157,23 @@ static boolean StartCDTrack(int track, boolean loop)
     return true;
 }
 */
+
+void toUpper(char *text, char *nText)
+{
+    int i;
+
+    for(i=0; i <= strlen(text); i++)
+    {
+	// is the char lower case...?
+        if((text[i] > 96 ) && (text[i] < 123))
+	    // ...if so, make upper!
+            nText[i] = text[i] - 'a' + 'A';
+        else
+	    // do nothing
+            nText[i] = text[i];
+    }   
+}
+
 //==========================================================================
 //
 // S_StartSong
@@ -297,20 +320,38 @@ void S_StartSong(int song, boolean loop)
 	    song = 40;
     }
 */
-    if (song == Mus_Song)
+    if (song == Mus_Song && !change_anyway)
     {                       // don't replay an old song
         return;
     }
+
+    change_anyway = false;
+
     if (RegisteredSong)
     {
         I_StopSong();
         I_UnRegisterSong(RegisteredSong);
         RegisteredSong = 0;
     }
+
     songLump = P_GetMapSongLump(song);
+
     if (!songLump)
     {
         return;
+    }
+
+    if(loop)
+    {
+	char songname[10];
+	toUpper(songLump, songname);
+	C_Printf(" S_STARTSONG: %s (LOOP = YES)\n", songname);
+    }
+    else
+    {
+	char songname[10];
+	toUpper(songLump, songname);
+	C_Printf(" S_STARTSONG: %s (LOOP = NO)\n", songname);
     }
 
     lumpnum = W_GetNumForName(songLump);
@@ -922,7 +963,7 @@ void S_Init(void)
 //      SoundCurve = Z_Malloc(MAX_SND_DIST, PU_STATIC, NULL);
 
     I_InitSound(false);
-
+printf("HI!\n");
     if (snd_Channels > 8)
     {
         snd_Channels = 8;

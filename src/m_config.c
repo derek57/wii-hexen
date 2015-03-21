@@ -176,6 +176,7 @@ extern int key_invright, key_invuse;
     CONFIG_VARIABLE_INT		(vanilla_weapon_change),
     CONFIG_VARIABLE_INT		(wii_light),
     CONFIG_VARIABLE_INT		(xhair),
+    CONFIG_VARIABLE_INT		(music_engine),
     CONFIG_VARIABLE_INT		(key_fire),
     CONFIG_VARIABLE_INT		(key_use),
     CONFIG_VARIABLE_INT		(key_menu),
@@ -192,6 +193,7 @@ extern int key_invright, key_invuse;
     CONFIG_VARIABLE_INT		(key_look_center),
     CONFIG_VARIABLE_INT		(key_jump),
     CONFIG_VARIABLE_INT		(key_run),
+    CONFIG_VARIABLE_INT		(key_console),
 /*
 #ifdef FEATURE_SOUND
 
@@ -2303,6 +2305,18 @@ char *M_GetSaveGameDir(char *iwadname)
 	    savegameroot = SavePathRoot4USB;
 
 	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRootIWADUSB;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRootPWADUSB;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRootMusicUSB;
+
+	    M_MakeDirectory(savegameroot);
 	}
 	else if(sd)
 	{
@@ -2319,6 +2333,18 @@ char *M_GetSaveGameDir(char *iwadname)
 	    M_MakeDirectory(savegameroot);
 
 	    savegameroot = SavePathRoot4SD;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRootIWADSD;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRootPWADSD;
+
+	    M_MakeDirectory(savegameroot);
+
+	    savegameroot = SavePathRootMusicSD;
 
 	    M_MakeDirectory(savegameroot);
 	}
