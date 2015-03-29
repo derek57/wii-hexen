@@ -71,6 +71,7 @@
 
 extern boolean from_menu;
 extern boolean mus_cheat_used;
+extern boolean finale_music;
 
 // TYPES -------------------------------------------------------------------
 
@@ -696,15 +697,17 @@ void SB_NewLevel();
 
 void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 {
-    int i/*, j*/;
-//    int parm;
+    int i/*, j;
+    int parm*/;
     char lumpname[9];
     int lumpnum;
-//    mobj_t *mobj;
+/*
+    mobj_t *mobj;
 
-//    blank = W_CacheLumpName("BLANK", PU_CACHE);
-
+    blank = W_CacheLumpName("BLANK", PU_CACHE);
+*/
     mus_cheat_used = false;
+    finale_music = false;
 
     for (i = 0; i < MAXPLAYERS; i++)
     {

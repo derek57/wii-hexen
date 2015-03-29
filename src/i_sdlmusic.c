@@ -137,6 +137,7 @@ static boolean current_track_loop;
 boolean change_anyway;
 
 extern int tracknum;
+extern int finalestage;
 
 extern boolean mus_cheat_used;
 extern boolean usb;
@@ -751,7 +752,7 @@ static boolean IsMusicLump(int lumpnum)
 // Dump an example config file containing checksums for all MIDI music
 // found in the WAD directory.
 
-static void DumpSubstituteConfig(char *filename)
+/*static*/ void DumpSubstituteConfig(char *filename)
 {
     sha1_context_t context;
     sha1_digest_t digest;
@@ -967,12 +968,12 @@ static boolean I_SDL_InitMusic(void)
     {
         DumpSubstituteConfig(myargv[i + 1]);
     }
-*/
+
     if(usb)
         DumpSubstituteConfig("usb:/apps/wiihexen/hexen-music.cfg");
     else if(sd)
         DumpSubstituteConfig("sd:/apps/wiihexen/hexen-music.cfg");
-
+*/
     // If SDL_mixer is not initialized, we have to initialize it
     // and have the responsibility to shut it down later on.
 
@@ -1365,15 +1366,22 @@ static void RestartCurrentTrack(void)
         // Have we reached the actual end of track (not loop end)?
         if (!Mix_PlayingMusic() && current_track_loop)
         {
-//            RestartCurrentTrack();
+//            RestartCurrentTrack();	// FIXME: NOT WORKING CORRECTLY FOR THE WII (WORKAROUND BELOW)
 
 	    change_anyway = true;
 
 	    if(!mus_cheat_used)
-		// FIXME: FOR DOOM, THIS WORKS WITHOUT HAVING "- 1" ADDED HERE (MIGHT BE BUGGY)
-		S_StartSong(gamemap - 1, 1);
+	    {
+		if(gamestate == GS_LEVEL)
+		    // FIXME: FOR DOOM, THIS WORKS WITHOUT HAVING "- 1" ADDED HERE (MIGHT BE BUGGY)
+		    S_StartSong(gamemap, true);
+	        else if(gamestate == GS_INTERMISSION)
+		    S_StartSongName("hub", true);
+		else if(gamestate == GS_FINALE && finalestage == 4)
+		    S_StartSongName("chess", true);
+	    }
 	    else
-		S_StartSong(tracknum, 1);
+		S_StartSong(tracknum, true);
         }
     }
 #endif

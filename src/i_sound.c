@@ -219,18 +219,18 @@ void I_InitSound(boolean use_sfx_prefix)
     // Initialize the sound and music subsystems.
 
     if (!nosound)// && !screensaver_mode)
-*/
     {
         // This is kind of a hack. If native MIDI is enabled, set up
         // the TIMIDITY_CFG environment variable here before SDL_mixer
         // is opened.
 
-        if (/*!nomusic && (snd_musicdevice == SNDDEVICE_GENMIDI ||*/ snd_musicdevice == SNDDEVICE_GUS)//)
+        if (!nomusic && (snd_musicdevice == SNDDEVICE_GENMIDI || snd_musicdevice == SNDDEVICE_GUS)//)
         {
             I_InitTimidityConfig();
         }
 
-//        if (!nosfx)
+        if (!nosfx)
+*/
         {
             InitSfxModule(use_sfx_prefix);
         }
@@ -239,7 +239,7 @@ void I_InitSound(boolean use_sfx_prefix)
         {
             InitMusicModule();
         }
-    }
+//    }
 }
 
 void I_ShutdownSound(void)

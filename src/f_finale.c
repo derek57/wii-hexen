@@ -77,6 +77,10 @@ static fixed_t *Palette;
 static fixed_t *PaletteDelta;
 static byte *RealPalette;
 
+int finalestage;
+
+boolean finale_music;
+
 // CODE --------------------------------------------------------------------
 
 //===========================================================================
@@ -93,6 +97,7 @@ void F_StartFinale(void)
     automapactive = false;
     P_ClearMessage(&players[consoleplayer]);
 
+    finalestage = 0;
     FinaleStage = 0;
     FinaleCount = 0;
     FinaleText = GetFinaleText(0);
@@ -103,6 +108,7 @@ void F_StartFinale(void)
 
 //      S_ChangeMusic(mus_victor, true);
     S_StartSongName("hall", false);     // don't loop the song
+    finale_music = true;
 }
 
 //===========================================================================
@@ -129,6 +135,7 @@ void F_Ticker(void)
     {
         FinaleCount = 0;
         FinaleStage++;
+	finalestage = FinaleStage;
         switch (FinaleStage)
         {
             case 1:            // Text 1
@@ -139,6 +146,7 @@ void F_Ticker(void)
                 FinaleEndCount = strlen(FinaleText) * TEXTSPEED + TEXTWAIT;
                 FinaleLumpNum = W_GetNumForName("FINALE2");
                 S_StartSongName("orb", false);
+		finale_music = true;
                 break;
             case 3:            // Pic 2 -- Fade out
                 FinaleEndCount = 70;

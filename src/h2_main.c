@@ -117,6 +117,7 @@ extern boolean MenuActive;
 extern boolean askforquit;
 extern boolean use_alternate_startup;
 extern boolean add_dk;
+extern boolean finale_music;
 
 extern int loading_disk;
 extern int warped;
@@ -315,6 +316,8 @@ static void D_Endoom(void)
 //
 //==========================================================================
 void InitMapMusicInfo(void);
+
+/*static*/ void DumpSubstituteConfig(char *filename);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
@@ -607,6 +610,11 @@ void D_DoomMain(void)
 	D_AddFile("usb:/apps/wiihexen/psphexen.wad");
     else if(sd)
 	D_AddFile("sd:/apps/wiihexen/psphexen.wad");
+
+    if(usb)
+        DumpSubstituteConfig("usb:/apps/wiihexen/hexen-music.cfg");
+    else if(sd)
+        DumpSubstituteConfig("sd:/apps/wiihexen/hexen-music.cfg");
 
     if(debugmode)
     {
@@ -1005,7 +1013,7 @@ void H2_GameLoop(void)
     while (1)
     {
 	// check if the OGG music stopped playing
-	if(gamestate == GS_LEVEL && usergame)
+	if(usergame && gamestate != GS_DEMOSCREEN && gamestate != GS_CONSOLE && !finale_music)
 	    I_SDL_PollMusic();
 
         // Frame syncronous IO operations
