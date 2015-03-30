@@ -119,6 +119,7 @@ extern boolean use_alternate_startup;
 extern boolean add_dk;
 extern boolean finale_music;
 
+extern int wiilight;
 extern int loading_disk;
 extern int warped;
 extern int mus_engine;
@@ -139,6 +140,7 @@ boolean debugmode = false;      // checkparm of -debug
 */
 boolean demos_are_disabled = true;
 boolean do_not_repeat_music = false;
+boolean wiilight_on;
 
 boolean nomonsters;             // checkparm of -nomonsters
 boolean randomclass;            // checkparm of -randclass
@@ -611,10 +613,11 @@ void D_DoomMain(void)
     else if(sd)
 	D_AddFile("sd:/apps/wiihexen/psphexen.wad");
 
-    if(usb)
-        DumpSubstituteConfig("usb:/apps/wiihexen/hexen-music.cfg");
-    else if(sd)
-        DumpSubstituteConfig("sd:/apps/wiihexen/hexen-music.cfg");
+    if(wiilight == 1)	// WE NEED THIS HERE OR ELSE THE GAME WILL PREVENT TO BOOT UP
+    {
+	wiilight = 0;
+	wiilight_on = true;
+    }
 
     if(debugmode)
     {
@@ -700,6 +703,9 @@ void D_DoomMain(void)
     if(!use_alternate_startup)
 	ST_Init();
 
+    if(wiilight_on)	// SECOND INSTANCE OF GAME BOOT-UP AND WIILIGHT USEAGE
+	wiilight = 1;
+
     if(debugmode)
 	ST_Message("Executable: Version 1.1 Mar 12 1996 (CBI).\n");
 
@@ -707,6 +713,11 @@ void D_DoomMain(void)
     if(debugmode)
     	ST_Message("R_Init: Init Hexen refresh daemon");
     R_Init();
+
+    if(usb)
+        DumpSubstituteConfig("usb:/apps/wiihexen/hexen-music.cfg");
+    else if(sd)
+        DumpSubstituteConfig("sd:/apps/wiihexen/hexen-music.cfg");
 
     if(debugmode)
     	ST_Message("\n");
