@@ -45,6 +45,8 @@
 
 //#define OGG_SUPPORT 1
 
+#define INCLUDE_FLIES 1
+
 #endif /* #ifndef DOOM_FEATURES_H */
 
 

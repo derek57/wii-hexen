@@ -72,6 +72,7 @@
 extern boolean from_menu;
 extern boolean mus_cheat_used;
 extern boolean finale_music;
+extern boolean spawned;
 
 // TYPES -------------------------------------------------------------------
 
@@ -708,6 +709,7 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 */
     mus_cheat_used = false;
     finale_music = false;
+    spawned = false;
 
     for (i = 0; i < MAXPLAYERS; i++)
     {

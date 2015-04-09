@@ -60,6 +60,7 @@
 #include "deh_str.h"
 //#include "i_endoom.h"
 #include "c_io.h"
+#include "w_merge.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -177,6 +178,7 @@ int fsizedd = 0;
 int fsizerw = 0;
 int resource_wad_exists = 0;
 int show_endoom = 0;		// FIXME: DOESN'T WORK FOR THE WII
+int startloadgame;
 
 char *iwadfile;
 
@@ -333,8 +335,8 @@ void D_DoomMain(void)
 */
     if(debugmode)
     {
-//	fsize = 20083672;
-	fsize = 21078584;
+//	fsize = 20428208;
+	fsize = 20083672;
 
 	if(add_dk)
 	    fsizedd = 4440584;
@@ -559,9 +561,11 @@ void D_DoomMain(void)
     if(debugmode)
     {
 	if(usb)
-	    D_AddFile("usb:/apps/wiihexen/IWAD/MACFULL/HEXEN.WAD");
+//	    D_AddFile("usb:/apps/wiihexen/IWAD/BETA3/HEXEN.WAD");
+	    D_AddFile("usb:/apps/wiihexen/IWAD/Reg/v11/HEXEN.WAD");
 	else if(sd)
-	    D_AddFile("sd:/apps/wiihexen/IWAD/MACFULL/HEXEN.WAD");
+//	    D_AddFile("sd:/apps/wiihexen/IWAD/BETA3/HEXEN.WAD");
+	    D_AddFile("sd:/apps/wiihexen/IWAD/Reg/v11/HEXEN.WAD");
     }
     else
 	D_AddFile(target);
@@ -607,11 +611,16 @@ void D_DoomMain(void)
 
 	load_extra_wad = 1;
     }
-
+/*
     if(usb)
 	D_AddFile("usb:/apps/wiihexen/psphexen.wad");
     else if(sd)
 	D_AddFile("sd:/apps/wiihexen/psphexen.wad");
+*/
+    if(usb)
+        W_MergeFile("usb:/apps/wiihexen/psphexen.wad");
+    else if(sd)
+        W_MergeFile("sd:/apps/wiihexen/psphexen.wad");
 
     if(wiilight == 1)	// WE NEED THIS HERE OR ELSE THE GAME WILL PREVENT TO BOOT UP
     {
@@ -709,6 +718,9 @@ void D_DoomMain(void)
     if(debugmode)
 	ST_Message("Executable: Version 1.1 Mar 12 1996 (CBI).\n");
 
+    // Not loading a game
+    startloadgame = -1;
+
     // Show version message now, so it's visible during R_Init()
     if(debugmode)
     	ST_Message("R_Init: Init Hexen refresh daemon");
@@ -788,10 +800,13 @@ void D_DoomMain(void)
 
     p = M_CheckParmWithArgs("-loadgame", 1);
     if (p)
-    {
-        G_LoadGame(atoi(myargv[p + 1]));
-    }
 */
+    if (startloadgame >= 0)
+    {
+//        G_LoadGame(atoi(myargv[p + 1]));
+        G_LoadGame(startloadgame);
+    }
+
     if (gameaction != ga_loadgame)
     {
         UpdateState |= I_FULLSCRN;

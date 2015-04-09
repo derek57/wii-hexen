@@ -24,6 +24,9 @@
 #include "s_sound.h"
 #include "sounds.h"
 
+#include "doomfeatures.h"
+#include "c_io.h"
+
 // MACROS ------------------------------------------------------------------
 
 #define MAX_TID_COUNT 200
@@ -48,6 +51,10 @@ static void PlayerLandedOnThing(mobj_t * mo, mobj_t * onmobj);
 extern mobj_t LavaInflictor;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
+
+extern boolean custom_map13;
+
+boolean spawned;
 
 mobjtype_t PuffType;
 mobj_t *MissileMobj;
@@ -1389,7 +1396,7 @@ void P_SpawnPlayer(mapthing_t * mthing)
 
 void P_SpawnMapThing(mapthing_t * mthing)
 {
-    int i;
+    int i, fly_x, fly_y, fly_z;
     unsigned int spawnMask;
     mobj_t *mobj;
     fixed_t x, y, z;
@@ -1432,8 +1439,10 @@ void P_SpawnMapThing(mapthing_t * mthing)
         }
         return;
     }
+
     // Check for player starts 5 to 8
-/*							// HACK FOR DEMO & BETA COMPATIBILITY
+    // FIXME: (HACK) DISABLE FOR DEMO & BETA COMPATIBILITY???
+/*
     if (mthing->type >= 9100 && mthing->type <= 9103)
     {
         mapthing_t *player_start;
@@ -1445,7 +1454,8 @@ void P_SpawnMapThing(mapthing_t * mthing)
         memcpy(player_start, mthing, sizeof(mapthing_t));
         player_start->type = player + 1;
 
-        if (!deathmatch && !player_start->arg1)
+//        if (!deathmatch && !player_start->arg1)
+        if (!player_start->arg1)
         {
             P_SpawnPlayer(player_start);
         }
@@ -1532,6 +1542,18 @@ void P_SpawnMapThing(mapthing_t * mthing)
         }
     }
 
+#ifdef INCLUDE_FLIES
+
+    if (mthing->type == 9100	||
+	mthing->type == 9101	||
+	mthing->type == 9102	||
+	mthing->type == 9103)
+    {
+	return;
+    }
+
+#else
+
     if ((HEXEN_BETA && gamemap == 13 &&	// HACK for HEXEN RETAIL STORE BETA #3: On the map "SHADOW WOOD"
 	mthing->type == 112)	||	// there is a THING with ID #112 in the HUB's exit room which
 	mthing->type == 9100	||	// represents a FLY. Since the code for this FLY is missing and
@@ -1541,6 +1563,8 @@ void P_SpawnMapThing(mapthing_t * mthing)
     {					// loading. We also need to disable spawning of the player
 	return;				// starts 5, 6, 7 and 8 for DEMO & BETA compatibility.
     }
+
+#endif
 
     if (i == NUMMOBJTYPES)
     {                           // Can't find thing type
@@ -1563,6 +1587,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
 
     x = mthing->x << FRACBITS;
     y = mthing->y << FRACBITS;
+
     if (mobjinfo[i].flags & MF_SPAWNCEILING)
     {
         z = ONCEILINGZ;
@@ -1579,6 +1604,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
     {
         z = ONFLOORZ;
     }
+
     switch (i)
     {                           // Special stuff
         case MT_ZLYNCHED_NOHEART:
@@ -1588,6 +1614,18 @@ void P_SpawnMapThing(mapthing_t * mthing)
             break;
     }
     mobj = P_SpawnMobj(x, y, z, i);
+
+    if (!HEXEN_BETA && gamemap == 13 && !spawned && !custom_map13)
+    {
+	fly_x = 134217728;
+	fly_y = -3145728;
+	fly_z = -2147483647 - 1;	// "- 1" TO GET AROUND THE COMPILER WARNING ABOUT ISO C90
+
+	mobj = P_SpawnMobj(fly_x, fly_y, fly_z, MT_FLY);
+//	C_Printf("FLY WAS SPAWNED FOR MAP SHADOW WOOD\n");
+	spawned = true;
+    }
+
     if (z == ONFLOORZ)
     {
         mobj->z += mthing->height << FRACBITS;

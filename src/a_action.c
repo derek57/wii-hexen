@@ -22,6 +22,9 @@
 #include "p_local.h"
 #include "s_sound.h"
 
+#include "doomfeatures.h"
+#include "c_io.h"
+
 // MACROS ------------------------------------------------------------------
 
 // TYPES -------------------------------------------------------------------
@@ -1316,6 +1319,168 @@ void A_BatMove(mobj_t * actor)
     actor->z = actor->target->z + 2 * FloatBobOffsets[actor->args[0]];
     actor->args[0] = (actor->args[0] + 3) & 63;
 }
+
+#ifdef INCLUDE_FLIES
+
+#define BOBTOFINESHIFT 7
+
+int clipping;
+
+static mobj_t *FindCorpse(mobj_t *fly, sector_t *sec, int recurselimit)
+{
+    int		i;
+
+    mobj_t	*check;
+    mobj_t	*fallback = NULL;
+    sec->validcount = validcount;
+
+    // Search the current sector
+    for (check = sec->thinglist; check != NULL; check = check->snext)
+    {
+    	if (check == fly)
+    	{
+    	    continue;
+    	}
+
+    	if (!(check->flags & MF_CORPSE))
+    	{
+    	    continue;
+    	}
+
+    	if (!P_CheckSight(fly, check))
+    	{
+    	    continue;
+    	}
+
+    	fallback = check;
+
+    	if (P_Random() > 128)	// 50% chance to try to pick a different corpse
+    	{
+    	    continue;
+    	}
+    	return check;
+    }
+
+    if (--recurselimit <= 0 || (fallback != NULL && P_Random() > 128))
+    {
+    	return fallback;
+    }
+
+    // Try neighboring sectors
+    for (i = 0; i < sec->linecount; ++i)
+    {
+    	line_t *line = sec->lines[i];
+    	sector_t *sec2 = (line->frontsector == sec) ? line->backsector : line->frontsector;
+
+    	if (sec2 != NULL && sec2->validcount != validcount)
+    	{
+    	    mobj_t *neighbor = FindCorpse(fly, sec2, recurselimit);
+
+    	    if (neighbor != NULL)
+    	    {
+    	    	return neighbor;
+    	    }
+    	}
+    }
+    return fallback;
+}
+
+void A_FlySearch(mobj_t *actor)
+{
+    mobj_t *other;
+
+    // The version from the retail beta is not so great for general use:
+    // 1. Pick one of the first fifty thinkers at random.
+    // 2. Starting from that thinker, find one that is an actor, not itself,
+    //    and within sight. Give up after 100 sequential thinkers.
+    // It's effectively useless if there are more than 150 thinkers on a map.
+    //
+    // So search the sectors instead. We can't potentially find something all
+    // the way on the other side of the map and we can't find invisible corpses,
+    // but at least we aren't crippled on maps with lots of stuff going on.
+
+    validcount++;
+
+    other = FindCorpse(actor, actor->subsector->sector, 5);
+
+    if (other != NULL)
+    {
+    	actor->target = other;
+        P_SetMobjState(actor, S_FLY1);
+    }
+}
+
+void A_FlyBuzz(mobj_t * actor)
+{
+    int		zrand, ztarg;
+
+    angle_t	ang;
+    mobj_t	*targ = actor->target;
+
+    if (targ == NULL || !(targ->flags & MF_CORPSE) || P_Random() < 5)
+    {
+        P_SetMobjState(actor, S_FLY_SEARCH);
+
+    	return;
+    }
+
+    ang = R_PointToAngle2(actor->x, actor->y, targ->x, targ->y);
+    actor->angle = ang;
+    actor->args[0]++;
+    ang >>= ANGLETOFINESHIFT;
+
+    if (!P_TryMove(actor, actor->x + 6 * finecosine[ang], actor->y + 6 * finesine[ang]))
+    {
+        // FIXME: SOMETHING MIGHT BE MISSING HERE...
+        // (FLYING AROUND WHEN PASSING THROUGH MONSTERS)...
+        // THEREFORE: "RETURN" DISABLED TO KEEP FLYING AND...!
+        // ...PLAY SOUND AS WELL WHEN CLIPPING MONSTERS / PLAYERS.
+/*
+        clipping++;						// FOR DEBUGGING
+        C_Printf("CLIPPED FLY %d TIMES!\n", clipping);		// FOR DEBUGGING
+
+        return;
+*/
+    }
+
+    if (actor->args[0] & 2)
+    {
+        actor->x += (P_Random() - 128) << BOBTOFINESHIFT;
+        actor->y += (P_Random() - 128) << BOBTOFINESHIFT;
+    }
+
+    zrand = P_Random();
+
+    if (targ->z + 5 * FRACUNIT < actor->z && zrand > 150)
+    {
+        zrand = -zrand;
+    }
+
+    if(zrand < 0)						// WORKAROUND FOR THE WII
+        zrand = P_Random();					// WORKAROUND FOR THE WII
+
+//    actor->z = zrand << BOBTOFINESHIFT;			// FIXME: NOT WORKING FOR THE WII
+
+    ztarg = targ->z + 2 * FloatBobOffsets[actor->args[0]] + (zrand << 12);	// WORKAROUND FOR WII
+
+    // Handle Z movement
+    if(ztarg > 2600000 && ztarg < 5000000)			// WORKAROUND FOR THE WII
+        actor->z = ztarg;					// WORKAROUND FOR THE WII
+/*
+    C_Printf("X: %d\n", actor->x);				// FOR DEBUGGING
+    C_Printf("Y: %d\n\n", actor->y);				// FOR DEBUGGING
+
+    C_Printf("TARG: %d\n", (targ->z + 5 * FRACUNIT));		// FOR DEBUGGING
+    C_Printf("ACTOR: %d\n", actor->z);				// FOR DEBUGGING
+    C_Printf("ZRAND: %d\n\n\n", zrand);				// FOR DEBUGGING
+*/
+    if (P_Random() < 40)
+    {
+        S_StartSound(actor, SFX_FLY_BUZZ);
+    }
+}
+
+#endif
 
 //===========================================================================
 //

@@ -31,6 +31,7 @@ int	load_extra_wad = 0;
 
 bool	multiplayer = false;
 bool	multiplayer_flag = false;
+bool	custom_map13 = false;
 
 // Local prototypes: wiiNinja
 void WaitPrompt (char *prompt);
@@ -380,6 +381,13 @@ void Menu_FatDevice(void)
 	Menu_FatDevice();
 }
 
+int search(const char *content, const char *search_term)
+{
+   char *result = strstr(content, search_term);
+   if(result == NULL) return 0;
+   return (int)(result - content);
+}
+
 int MD5_Check(char *final);
 
 char	path_tmp2[MAXPATH];
@@ -392,6 +400,7 @@ void Menu_WadList(void)
     char	check[MAXPATH];
     char	iwad_term[] = "IWAD";
     char	pwad_term[] = "PWAD";
+    char	map13_term[] = "MAP13";
 //    char	deh_term[] = "Patch File for DeHackEd";
     char	str [100];
     char	stripped_target[MAXPATH] = "";
@@ -421,7 +430,11 @@ void Menu_WadList(void)
     extern char known_md5_string_hexdd_1_0_iwad[33];
     extern char known_md5_string_hexdd_1_1_iwad[33];
 
-    int		i, c;
+    int		i;
+    int		j;
+    int		c;
+    int		ch;
+    int		len;
 /*
     int		installCnt = 0;
     int		uninstallCnt = 0;
@@ -443,6 +456,8 @@ void Menu_WadList(void)
     s32		ret;
     s32		selected = 0;
     s32		start = 0;
+
+    custom_map13 = false;
 
     // wiiNinja: check for malloc error
     if (tmpPath == NULL)
@@ -673,6 +688,11 @@ void Menu_WadList(void)
 	printStyledText(17, 0,CONSOLE_FONT_BLACK,CONSOLE_FONT_WHITE,CONSOLE_FONT_BOLD,&stTexteLocation,"  ----------------------------------------------------------------------------  ");
 /*
 	// ONLY FOR DEBUGGING STUFF
+	if(custom_map13)
+	    printf("\nCUSTOM MAP13 FOUND!\n");
+	else
+	    printf("\nNO CUSTOM MAP13 FOUND!\n");
+
 	if	(strncmp(calculated_md5_string, known_md5_string_hexen_beta_iwad, 32) == 0 ||
 		 strncmp(calculated_md5_string, known_md5_string_hexen_demo_iwad, 32) == 0 ||
 		 strncmp(calculated_md5_string, known_md5_string_hexen_beta_demo_iwad, 32) == 0 ||
@@ -1072,7 +1092,35 @@ void Menu_WadList(void)
 			}
 */
 		    }
+		    len = strlen(map13_term);
+
+		    for( ; ; )
+		    {
+			if(EOF == (ch = fgetc(file)))
+			    break;
+
+			if((char) ch != *map13_term)
+			    continue;
+
+			for(j = 1; j < len; ++j)
+			{
+			    if(EOF == (ch = fgetc(file)))
+				goto end;
+
+			    if((char) ch != map13_term[j])
+			    {
+				fseek(file, 1 - j, SEEK_CUR);
+
+				goto next;
+			    }
+			}
+			custom_map13 = true;
+
+			next: ;
+		    }
 		}
+		end:
+
 		memset(buffer, 0, sizeof(buffer));
 
 		fclose(file);
@@ -1104,6 +1152,8 @@ void Menu_WadList(void)
 
 	if (buttons & WPAD_CLASSIC_BUTTON_X)
 	{
+	    custom_map13 = false;
+
 //	    load_dehacked = 0;
 	    load_extra_wad = 0;
 
