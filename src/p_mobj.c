@@ -1558,14 +1558,16 @@ void P_SpawnMapThing(mapthing_t * mthing)
 		mthing->y << FRACBITS == 98566144)	// WALL BECAUSE IT WOULD PREVENT LEVEL PROGRESS
 		return;
 	}
+/*
 	else if(gamemap == 13)		// HACK for the HEXEN RETAIL STORE BETA #3: On the map
 	{				// "SHADOW WOOD" there is a THING with ID #112 in the
 	    if (mthing->type == 112)	// HUB's exit room which represents a FLY. Since the
 		return;			// code for this FLY is missing and said THING isn't
 					// even included in the map of the DOS FINAL version,
-					// we must deactivate the spawning of that THING,
-					// because in any other case the game would crash upon
-	}				// map loading.
+					// we must deactivate the spawning of that THING, because
+					// in any other case the game would crash upon map loading
+	}
+*/					// THIS HAS BEEN FIXED NOW
     }
 
     if (i == NUMMOBJTYPES)
