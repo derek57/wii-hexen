@@ -376,6 +376,9 @@ void F_Drawer(void)
             break;
         case 1:
         case 2:
+	    if(HEXEN_BETA && gamemap == 40)		 // HACK: FOR THE RETAIL STORE BETA #3 WE WANNA
+		P_ClearMessage(&players[consoleplayer]); // MAKE THE MESSAGE "PLEASE TYPE 'WEWIN' NOW"
+							 // DISAPPEAR AFTER THE SCREEN DID FADE IN.
             TextWrite();
             break;
         case 3:                // Fade screen out

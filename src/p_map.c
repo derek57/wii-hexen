@@ -2251,12 +2251,12 @@ boolean PIT_ChangeSector(mobj_t * thing)
         {
             if (thing->state != &states[S_GIBS1])
             {
-		if(!HEXEN_BETA)				// HACK: the RETAIL STORE BETA IWAD doesn't
-		{					// contain sprite "GIBSA0" which is required
+		if(!HEXEN_BETA && !HEXEN_BETA_DEMO)	// HACK: RETAIL STORE BETA & BETA DEMO IWAD do
+		{					// not contain sprite "GIBSA0" which is required
 		    P_SetMobjState (thing, S_GIBS1);	// where ceilings are starting crunching dead
 		}					// bodies into gibs, so we have to disable it
 							// here in order to make the game not crash.
-                P_SetMobjState(thing, S_GIBS1);
+//                P_SetMobjState(thing, S_GIBS1);
                 thing->height = 0;
                 thing->radius = 0;
                 S_StartSound(thing, SFX_PLAYER_FALLING_SPLAT);

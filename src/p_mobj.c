@@ -1542,29 +1542,31 @@ void P_SpawnMapThing(mapthing_t * mthing)
         }
     }
 
-#ifdef INCLUDE_FLIES
-
-    if (mthing->type == 9100	||
-	mthing->type == 9101	||
+    if (mthing->type == 9100	||	// HACK: We need to disable spawning of the player starts 5,
+	mthing->type == 9101	||	// 6, 7 and 8 for DEMO & BETA compatibility.
 	mthing->type == 9102	||
 	mthing->type == 9103)
     {
 	return;
     }
 
-#else
-
-    if ((HEXEN_BETA && gamemap == 13 &&	// HACK for HEXEN RETAIL STORE BETA #3: On the map "SHADOW WOOD"
-	mthing->type == 112)	||	// there is a THING with ID #112 in the HUB's exit room which
-	mthing->type == 9100	||	// represents a FLY. Since the code for this FLY is missing and
-	mthing->type == 9101	||	// said THING isn't even included in the map of the DOS FINAL
-	mthing->type == 9102	||	// version, we must deactivate the spawning of that THING,
-	mthing->type == 9103)		// because in any other case the game would crash upon map
-    {					// loading. We also need to disable spawning of the player
-	return;				// starts 5, 6, 7 and 8 for DEMO & BETA compatibility.
+    if (HEXEN_BETA)
+    {
+	if(gamemap == 12)
+	{
+	    if (mthing->x << FRACBITS == -12582912 &&	// HACK: DISABLE SPAWN OF CENTAUR LOCATED IN A
+		mthing->y << FRACBITS == 98566144)	// WALL BECAUSE IT WOULD PREVENT LEVEL PROGRESS
+		return;
+	}
+	else if(gamemap == 13)		// HACK for the HEXEN RETAIL STORE BETA #3: On the map
+	{				// "SHADOW WOOD" there is a THING with ID #112 in the
+	    if (mthing->type == 112)	// HUB's exit room which represents a FLY. Since the
+		return;			// code for this FLY is missing and said THING isn't
+					// even included in the map of the DOS FINAL version,
+					// we must deactivate the spawning of that THING,
+					// because in any other case the game would crash upon
+	}				// map loading.
     }
-
-#endif
 
     if (i == NUMMOBJTYPES)
     {                           // Can't find thing type
@@ -1613,6 +1615,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
         default:
             break;
     }
+//    C_Printf("X: %d, Y: %d, Z: %d, I: %d\n", x, y, z, i);	// FOR DEBUGGING
     mobj = P_SpawnMobj(x, y, z, i);
 
     if (!HEXEN_BETA && gamemap == 13 && !spawned && !custom_map13)
@@ -1622,7 +1625,6 @@ void P_SpawnMapThing(mapthing_t * mthing)
 	fly_z = -2147483647 - 1;	// "- 1" TO GET AROUND THE COMPILER WARNING ABOUT ISO C90
 
 	mobj = P_SpawnMobj(fly_x, fly_y, fly_z, MT_FLY);
-//	C_Printf("FLY WAS SPAWNED FOR MAP SHADOW WOOD\n");
 	spawned = true;
     }
 

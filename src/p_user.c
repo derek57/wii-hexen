@@ -865,8 +865,7 @@ void P_PlayerThink(player_t * player)
     {
         player->powers[pw_infrared]--;
     }
-/*
-    if (player->powers[pw_flight] && netgame)
+    if (player->powers[pw_flight] /*&& netgame*/)
     {
         if (!--player->powers[pw_flight])
         {
@@ -880,7 +879,6 @@ void P_PlayerThink(player_t * player)
             BorderTopRefresh = true;    //make sure the sprite's cleared out
         }
     }
-*/
     if (player->powers[pw_speed])
     {
         player->powers[pw_speed]--;

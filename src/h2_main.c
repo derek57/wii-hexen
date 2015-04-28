@@ -712,9 +712,6 @@ void D_DoomMain(void)
     if(!use_alternate_startup)
 	ST_Init();
 
-    if(wiilight_on)	// SECOND INSTANCE OF GAME BOOT-UP AND WIILIGHT USEAGE
-	wiilight = 1;
-
     if(debugmode)
 	ST_Message("Executable: Version 1.1 Mar 12 1996 (CBI).\n");
 
@@ -1035,6 +1032,9 @@ void H2_GameLoop(void)
 	I_InitGraphics();
 
     main_loop_started = true;
+
+    if(wiilight_on)	// SECOND INSTANCE OF GAME BOOT-UP AND WIILIGHT USEAGE
+	wiilight = 1;
 
     while (1)
     {

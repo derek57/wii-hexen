@@ -425,8 +425,9 @@ static boolean ActivateThing(mobj_t * mobj)
             P_SetMobjState(mobj, S_ZGEMPEDESTAL2);
             break;
         case MT_ZWINGEDSTATUENOSKULL:
-            P_SetMobjState(mobj, S_ZWINGEDSTATUENOSKULL2);
-            break;
+	    if(!HEXEN_BETA)					// HACK FOR THE RETAIL STORE BETA #3:
+                P_SetMobjState(mobj, S_ZWINGEDSTATUENOSKULL2);	// THERE IS NO SPRITE FOR THE COMPLETE
+            break;						// STATUE WITH SKULL IN IT'S HANDS
         case MT_THRUSTFLOOR_UP:
         case MT_THRUSTFLOOR_DOWN:
             if (mobj->args[0] == 0)

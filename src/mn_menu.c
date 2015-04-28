@@ -633,7 +633,8 @@ char *enmaptext[] = {
     "MENELKIR'S TOMB",
     "TRADUCTUS' TOMB",
     "VIVARIUM",
-    "DARK CRUCIBLE"
+    "DARK CRUCIBLE",
+    ""
 };
 
 char *maptextdd[] = {
@@ -991,7 +992,7 @@ static MenuItem_t KeysItems[] = {
     {ITT_EFUNC, "SILVER KEY", SCSilver, 0, MENU_NONE},
     {ITT_EFUNC, "STEEL KEY", SCSteel, 0, MENU_NONE},
     {ITT_EFUNC, "FIRE KEY", SCFire, 0, MENU_NONE},
-    {ITT_EFUNC, "FORN KEY", SCHorn, 0, MENU_NONE},
+    {ITT_EFUNC, "HORN KEY", SCHorn, 0, MENU_NONE},
     {ITT_EFUNC, "CAVE KEY", SCCave, 0, MENU_NONE},
     {ITT_EFUNC, "SWAMP KEY", SCSwamp, 0, MENU_NONE},
     {ITT_EFUNC, "CASTLE KEY", SCCastle, 0, MENU_NONE},
@@ -1041,7 +1042,7 @@ static MenuItem_t ArtifactsItems[] = {
     {ITT_EFUNC, "FLECHETTE", SCFlechette, 0, MENU_NONE},
     {ITT_EFUNC, "BANISHMENT DEVICE", SCBanDev, 0, MENU_NONE},
     {ITT_EFUNC, "BOOTS OF SPEED", SCBoots, 0, MENU_NONE},
-    {ITT_EFUNC, "CRYSTAL VIAL", SCVial, 0, MENU_NONE},
+    {ITT_EFUNC, "KRATER OF MIGHT", SCVial, 0, MENU_NONE},
     {ITT_EFUNC, "DRAGONSKIN BRACERS", SCBracers, 0, MENU_NONE},
     {ITT_EFUNC, "CHAOS DEVICE", SCChaosDev, 0, MENU_NONE},
     {ITT_EFUNC, "MAP SCROLL", SCMapScroll, 0, MENU_NONE}

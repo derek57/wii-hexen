@@ -458,12 +458,11 @@ boolean P_StartACS(int number, int map, byte * args, mobj_t * activator,
         return AddToACSStore(map, number, args);
     }
 
-    if(HEXEN_BETA && map == 40 && number == 20)	// HACK: WON'T RUN SCRIPT 20 ("PLEASE TYPE 'WEWIN' NOW")
-    {						// WHEN ENDING THE HEXEN BETA GAME ON MAP 40, BUT ...
-	F_StartFinale();			// ... JUST SIMPLY RUN THE FINALE INSTEAD (ANYWAY, THE
-	P_ClearMessage(&players[consoleplayer]);// MESSAGE "PLEASE TYPE 'WEWIN' NOW" IS STILL SHOWN)
-    }
-
+    if(HEXEN_BETA && map == 40 && number == 20)	// HACK: USUALLY THE RETAIL STORE BETA #3 ONLY SHOWS
+    {						// THE MESSAGE "("PLEASE TYPE 'WEWIN' NOW") WHEN ENDING
+	F_StartFinale();			// THE GAME ON MAP 40 AND YOU HAVE TO MANUALLY TYPE
+    }						// "WEWIN" ON THE KEYBOARD IN ORDER TO START THE FINALE
+						// SO WE DO THIS FOR THE WII PORT AUTOMATICALLY HERE.
     infoIndex = GetACSIndex(number);
     if (infoIndex == -1)
     {                           // Script not found

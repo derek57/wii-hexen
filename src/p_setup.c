@@ -437,6 +437,8 @@ void P_LoadThings(int lump)
 =================
 */
 
+boolean repeat2;
+
 void P_LoadLineDefs(int lump)
 {
     byte *data;
@@ -453,15 +455,21 @@ void P_LoadLineDefs(int lump)
     mld = (maplinedef_t *) data;
     ld = lines;
     for (i = 0; i < numlines; i++, mld++, ld++)
-    {
-        ld->flags = SHORT(mld->flags);
-
+    {									// HACK FOR THE RETAIL STORE
+	if(HEXEN_BETA && gamemap == 27 && (i == 1957 || i == 1975))	// BETA #3: THIS FIXES A BUG ON
+	    ld->flags = 0x0204;						// THE MAP "HERESIARCH'S
+	else if(HEXEN_BETA && gamemap == 27 && i == 1961)		// SEMINARY" WHERE TELEPORTERS
+	    ld->flags = 0x0214;						// TO OTHER MAPS CAN ONLY BE
+	else								// USED ONCE, SO WE SET THE
+            ld->flags = SHORT(mld->flags);				// RETAIL FLAGS DURING MAP LOAD
+									// WHICH ALLOW REPEATED WARPING
         // Old line special info ...
         //ld->special = SHORT(mld->special);
         //ld->tag = SHORT(mld->tag);
 
         // New line special info ...
         ld->special = mld->special;
+
         ld->arg1 = mld->arg1;
         ld->arg2 = mld->arg2;
         ld->arg3 = mld->arg3;

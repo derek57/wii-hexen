@@ -959,7 +959,11 @@ void S_UpdateSounds(mobj_t * listener)
 
 void S_Init(void)
 {
-    SoundCurve = W_CacheLumpName("SNDCURVE", PU_STATIC);
+    if(HEXEN_BETA)
+	SoundCurve = W_CacheLumpName("SOUNDCRV", PU_STATIC);
+    else
+	SoundCurve = W_CacheLumpName("SNDCURVE", PU_STATIC);
+
 //      SoundCurve = Z_Malloc(MAX_SND_DIST, PU_STATIC, NULL);
 
     I_InitSound(false);
